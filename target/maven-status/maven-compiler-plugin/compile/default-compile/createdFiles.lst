@@ -1,0 +1,4 @@
+com\simplewebapp\resources\JakartaEE10Resource.class
+com\simplewebapp\JakartaRestConfiguration.class
+Test.class
+com\simplewebapp\DAO\ConSQL.class
