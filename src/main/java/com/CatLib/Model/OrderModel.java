@@ -4,7 +4,9 @@
  */
 package com.CatLib.Model;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,15 +17,31 @@ public class OrderModel {
     private int orderId;
     private Integer userId; // Có thể là null nếu không có UserID hợp lệ, dùng Integer
     private Integer bookId; // Có thể là null nếu không có BookID hợp lệ, dùng Integer
-    private LocalDate orderDate;
-    private LocalDate returnDate;
-    private LocalDate actualReturnDate; // Có thể là null
+    private Date orderDate;
+    private Date returnDate;
+    private Date actualReturnDate; // Có thể là null
     private long bill; // Sử dụng BigDecimal cho tiền tệ
     private String status;
 
+    private String title;
+    private String authorName;
+    private String publisher;
+    private String publishYear;
+    private String imageUrl;
+
+    public OrderModel(String title, String authorName, String publisher, String publishYear, Date orderDate, Date returnDate, String imageUrl) {
+        this.orderDate = orderDate;
+        this.returnDate = returnDate;
+        this.title = title;
+        this.authorName = authorName;
+        this.publisher = publisher;
+        this.publishYear = publishYear;
+        this.imageUrl = imageUrl;
+    }
+
     // Constructor
-    public OrderModel(int orderId, Integer userId, Integer bookId, LocalDate orderDate,
-            LocalDate returnDate, LocalDate actualReturnDate, long bill, String status) {
+    public OrderModel(int orderId, Integer userId, Integer bookId, Date orderDate,
+            Date returnDate, Date actualReturnDate, long bill, String status) {
         this.orderId = orderId;
         this.userId = userId;
         this.bookId = bookId;
@@ -35,6 +53,46 @@ public class OrderModel {
     }
 
     // Getters
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getPublishYear() {
+        return publishYear;
+    }
+
+    public void setPublishYear(String publishYear) {
+        this.publishYear = publishYear;
+    }
+
     public int getOrderId() {
         return orderId;
     }
@@ -47,15 +105,15 @@ public class OrderModel {
         return bookId;
     }
 
-    public LocalDate getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
-    public LocalDate getReturnDate() {
+    public Date getReturnDate() {
         return returnDate;
     }
 
-    public LocalDate getActualReturnDate() {
+    public Date getActualReturnDate() {
         return actualReturnDate;
     }
 
@@ -80,15 +138,15 @@ public class OrderModel {
         this.bookId = bookId;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
-    public void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
     }
 
-    public void setActualReturnDate(LocalDate actualReturnDate) {
+    public void setActualReturnDate(Date actualReturnDate) {
         this.actualReturnDate = actualReturnDate;
     }
 
@@ -102,15 +160,7 @@ public class OrderModel {
 
     @Override
     public String toString() {
-        return "OrderModel{"
-                + "orderId=" + orderId
-                + ", userId=" + userId
-                + ", bookId=" + bookId
-                + ", orderDate=" + orderDate
-                + ", returnDate=" + returnDate
-                + ", actualReturnDate=" + actualReturnDate
-                + ", bill=" + bill
-                + ", status='" + status + '\''
-                + '}';
+        return "OrderModel{" + "orderId=" + orderId + ", userId=" + userId + ", bookId=" + bookId + ", orderDate=" + orderDate + ", returnDate=" + returnDate + ", actualReturnDate=" + actualReturnDate + ", bill=" + bill + ", status=" + status + ", title=" + title + ", authorName=" + authorName + ", publisher=" + publisher + ", publishYear=" + publishYear + ", imageUrl=" + imageUrl + '}';
     }
+
 }

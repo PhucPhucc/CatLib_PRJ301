@@ -19,7 +19,7 @@ public class UserDAO {
     public static User findUser(Connection conn, //
             String userName, String password) throws SQLException {
 
-        String sql = "Select username, password, full_name, role, is_active from Users u " //
+        String sql = "Select userId, username, password, full_name, role, is_active from Users u " //
                 + " where u.username = ? and u.password= ?";
 
         PreparedStatement pstm = conn.prepareStatement(sql);
@@ -28,11 +28,12 @@ public class UserDAO {
         ResultSet rs = pstm.executeQuery();
 
         if (rs.next()) {
+            int userId = Integer.parseInt(rs.getString("userId"));
             String fullName = rs.getString("full_name");
             String role = rs.getString("role");
             boolean isActive = rs.getString("is_active").equals("1");
 
-            User user = new User(userName, password, fullName, role, isActive);
+            User user = new User(userId, userName, password, fullName, role, isActive);
 
             return user;
         }
@@ -51,7 +52,6 @@ public class UserDAO {
 
 //         public User(int userId, String username, String password, String fullName,
 //            String role, boolean isActive, String email, String phone) {
-        
         if (rs.next()) {
             String password = rs.getString("password");
             String fullName = rs.getString("full_name");
@@ -66,16 +66,19 @@ public class UserDAO {
         return null;
     }
 
-    public static void createUser(Connection conn, String userName, String password, String fullName) throws SQLException {
-
-        String sql = "INSERT INTO Users (username, password, full_name) VALUES (?, ?, ?)";
-
+    public static int createUser(Connection conn, String userName, String password, String email) throws SQLException {
+        String sql = "INSERT INTO Users (username, password, email) VALUES (?, ?, ?)";
         PreparedStatement pstm = conn.prepareStatement(sql);
         pstm.setString(1, userName);
         pstm.setString(2, password);
-        pstm.setString(3, fullName);
-
+        pstm.setString(3, email);
         pstm.executeUpdate();
-
+        
+        ResultSet rs = pstm.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("userId");
+        }
+        return -1;
     }
+
 }

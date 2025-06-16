@@ -4,7 +4,6 @@ package com.CatLib.Model;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 /**
  *
  * @author DuyPhuc
@@ -20,7 +19,8 @@ public class User {
     private String email;
     private String phone;
 
-    public User(String username, String password, String fullName, String role, boolean isActive) {
+    public User(int userId, String username, String password, String fullName, String role, boolean isActive) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
@@ -28,8 +28,28 @@ public class User {
         this.isActive = isActive;
     }
 
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = "user";
+        this.isActive = true;
+    }
+
     
     
+    public User() {
+    }
+
+    public User(int userId, String username, String password, String email) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.fullName = email;
+        this.role = "user";
+        this.isActive = true;
+    }
+
     // Constructor
     public User(String username, String password, String fullName,
             String role, boolean isActive, String email, String phone) {

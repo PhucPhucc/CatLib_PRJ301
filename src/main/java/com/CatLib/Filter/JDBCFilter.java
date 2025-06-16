@@ -25,7 +25,7 @@ import java.util.Map;
  * @author DuyPhuc
  */
 @WebFilter(filterName = "jdbcFilter", urlPatterns = {"/*"})
-public class JDBCFilter implements Filter {
+public class JDBCFilter implements Filter { 
 
     public JDBCFilter() {
     }

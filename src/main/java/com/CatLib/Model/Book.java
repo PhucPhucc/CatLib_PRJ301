@@ -14,17 +14,19 @@ public class Book {
 
     private int bookId;
     private String title;
-    private long price; // Sử dụng BigDecimal cho tiền tệ
+    private double price; // Sử dụng BigDecimal cho tiền tệ
     private Integer publishYear; // Có thể là null, dùng Integer
     private String description;
     private String publisher;
     private int stockQuantity;
-    private int categoryId;
-    private Integer authorId; // Có thể là null, dùng Integer
-
+    private String categoryName;
+    private String authorName; // Có thể là null, dùng Integer
+    private String urlImage;
+    
+    
     // Constructor
-    public Book(int bookId, String title, long price, Integer publishYear, String description,
-            String publisher, int stockQuantity, int categoryId, Integer authorId) {
+    public Book(int bookId, String title, double price, Integer publishYear, String description,
+            String publisher, int stockQuantity, String categoryName, String authorName, String urlImage) {
         this.bookId = bookId;
         this.title = title;
         this.price = price;
@@ -32,9 +34,26 @@ public class Book {
         this.description = description;
         this.publisher = publisher;
         this.stockQuantity = stockQuantity;
-        this.categoryId = categoryId;
-        this.authorId = authorId;
+        this.categoryName = categoryName;
+        this.authorName = authorName;
+        this.urlImage = urlImage;
     }
+
+    public Book(int bookId, String title, String description, String urlImage) {
+        this.bookId = bookId;
+        this.title = title;
+        this.description = description;
+        this.urlImage = urlImage;
+    }
+
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
+    }
+    
 
     // Getters
     public int getBookId() {
@@ -45,7 +64,7 @@ public class Book {
         return title;
     }
 
-    public long getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -65,12 +84,12 @@ public class Book {
         return stockQuantity;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public Integer getAuthorId() {
-        return authorId;
+    public String getAuthorName() {
+        return authorName;
     }
 
     // Setters
@@ -82,7 +101,7 @@ public class Book {
         this.title = title;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -102,12 +121,12 @@ public class Book {
         this.stockQuantity = stockQuantity;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     @Override
@@ -120,8 +139,8 @@ public class Book {
                 + ", description='" + description + '\''
                 + ", publisher='" + publisher + '\''
                 + ", stockQuantity=" + stockQuantity
-                + ", categoryId=" + categoryId
-                + ", authorId=" + authorId
+                + ", categoryId=" + categoryName
+                + ", authorId=" + authorName
                 + '}';
     }
 }

@@ -1,0 +1,96 @@
+<%-- 
+    Document   : homeView
+    Created on : Jun 1, 2025, 12:09:45 AM
+    Author     : DuyPhuc
+--%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html class="">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Home Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/styles.css?v=<%= System.currentTimeMillis() %>"/>
+
+  </head>
+  <body class="font-mono smooth-transition bg-[#c7f0fc] bg-center bg-no-repeat bg-cover min-h-screen dark:bg-gray-800 text-black dark:text-white">
+
+    <jsp:include page="_header.jsp"></jsp:include>
+
+        <main>
+          <div class="text-center">
+            <p class="text-8xl font-bold text-[#5f899f] tracking-widest my-6">WELCOME HOME</p>
+            <form action="${pageContext.request.contextPath}/search" method="post">
+            <input class="p-2 rounded-md w-1/3" type="text" name="search">
+            <button class="bg-[#5f899f] text-white py-2 px-4 rounded-md hover:bg-[#668f9b]">Search</button>
+          </form>
+        </div>
+
+        <div class="flex gap-4 px-4 py-8">
+          <div class="p-4 bg-white rounded-md w-1/6 max-h-max dark:bg-gray-950 smooth-transition ">
+            <p class="py-1 text-3xl text-[#5f899f] font-semibold ">Category</p>
+
+            <form method="post" action="${pageContext.request.contextPath}/search" class="text-md gap-1 xl:grid xl:grid-cols-2 md:flex md:flex-col">
+
+              <c:forEach items="${tags}" var="tag">
+                  <div class="flex items-center justify-between">
+                    <label >${tag.name}</label>
+                    <input type="radio" name="search" value="${tag.name}">
+                  </div>
+              </c:forEach>
+              <button type="submit" class="my-2 py-1 bg-[#303e3b] text-white rounded-md col-span-2 hover:bg-[#668f9b]">Find</button>
+            </form>
+          </div>
+
+          <div class="w-5/6 gap-4 grid grid-cols-4 xl:grid-cols-5 text-[#5f899f]">
+
+            <c:forEach items="${books}" var="book">
+                <div class="bg-white rounded-md p-3 dark:bg-gray-950 smooth-transition">
+                  <div >
+                    <img class="w-full h-full" src="${book.urlImage}" alt="${book.title}">
+                  </div>
+                  <p class="text-2xl font-semibold py-2 overflow-hidden text-ellipsis whitespace-nowrap">${book.title}</p>
+                  <p class=" line-2 overflow-hidden text-ellipsis text-left text-sm text-gray-700 font-medium leading-[1.5] min-h-[3em]">${book.description}</p>
+                  <div class="py-3 text-sm flex justify-between items-end">
+                    <a href="${pageContext.request.contextPath}/borrow?id=${book.bookId}" class="py-2 px-3 rounded-md bg-[#303e3b] text-white">Borrow now</a>
+                    <a href="${pageContext.request.contextPath}/detail?id=${book.bookId}" class="underline underline-offset-2">Detail</a>
+                  </div>
+                </div> 
+            </c:forEach>
+          </div>
+        </div>
+    </main>
+    <script>
+        document.querySelector('#home a').classList.add("border-b-4");
+        document.querySelector('#orders a').classList.remove("border-b-4");
+        document.querySelector('#about a').classList.remove("border-b-4");
+
+        const html = document.documentElement;
+        const btnDark = document.querySelector("#btn-dark");
+        if (html.classList.contains('dark')) {
+            btnDark.innerHTML = `<img class="size-6" src="https://img.icons8.com/?size=100&id=45475&format=png&color=ffffff" alt="do-not-disturb-2"/>`;
+        } else {
+            btnDark.innerHTML = `<img class="size-6" src="https://img.icons8.com/external-glyph-silhouettes-icons-papa-vector/78/external-Light-Mode-interface-glyph-silhouettes-icons-papa-vector.png" alt="external-Light-Mode-interface-glyph-silhouettes-icons-papa-vector"/>`;
+        }
+        function toggleDarkMode() {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                btnDark.innerHTML = `<img class="size-6" src="https://img.icons8.com/?size=100&id=45475&format=png&color=ffffff" alt="do-not-disturb-2"/>`;
+            } else {
+                btnDark.innerHTML = `<img class="size-6" src="https://img.icons8.com/external-glyph-silhouettes-icons-papa-vector/78/external-Light-Mode-interface-glyph-silhouettes-icons-papa-vector.png" alt="external-Light-Mode-interface-glyph-silhouettes-icons-papa-vector"/>`;
+            }
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+    </script>
+  </body>
+</html>
