@@ -4,7 +4,7 @@
  */
 package com.CatLib.Model;
 
-import java.math.BigDecimal;
+import java.sql.Date;
 
 /**
  *
@@ -14,8 +14,7 @@ public class Book {
 
     private int bookId;
     private String title;
-    private double price; // Sử dụng BigDecimal cho tiền tệ
-    private Integer publishYear; // Có thể là null, dùng Integer
+    private Date publishDate; // Có thể là null, dùng Integer
     private String description;
     private String publisher;
     private int stockQuantity;
@@ -25,12 +24,11 @@ public class Book {
     
     
     // Constructor
-    public Book(int bookId, String title, double price, Integer publishYear, String description,
+    public Book(int bookId, String title, Date publishDate, String description,
             String publisher, int stockQuantity, String categoryName, String authorName, String urlImage) {
         this.bookId = bookId;
         this.title = title;
-        this.price = price;
-        this.publishYear = publishYear;
+        this.publishDate = publishDate;
         this.description = description;
         this.publisher = publisher;
         this.stockQuantity = stockQuantity;
@@ -39,12 +37,26 @@ public class Book {
         this.urlImage = urlImage;
     }
 
-    public Book(int bookId, String title, String description, String urlImage) {
+    public Book(int bookId, String title, String description, int stockQuantity, String authorName, String urlImage) {
         this.bookId = bookId;
         this.title = title;
         this.description = description;
+        this.stockQuantity = stockQuantity;
+        this.authorName = authorName;
         this.urlImage = urlImage;
     }
+
+    public Book(String title, Date publishDate, String publisher, int stockQuantity, String description, String urlImage) {
+        this.title = title;
+        this.publishDate = publishDate;
+        this.description = description;
+        this.publisher = publisher;
+        this.stockQuantity = stockQuantity;
+        this.urlImage = urlImage;
+    }
+
+    
+  
 
     public String getUrlImage() {
         return urlImage;
@@ -64,12 +76,8 @@ public class Book {
         return title;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public Integer getPublishYear() {
-        return publishYear;
+    public Date getPublishDate() {
+        return publishDate;
     }
 
     public String getDescription() {
@@ -101,12 +109,8 @@ public class Book {
         this.title = title;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setPublishYear(Integer publishYear) {
-        this.publishYear = publishYear;
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public void setDescription(String description) {
@@ -134,8 +138,7 @@ public class Book {
         return "Book{"
                 + "bookId=" + bookId
                 + ", title='" + title + '\''
-                + ", price=" + price
-                + ", publishYear=" + publishYear
+                + ", publishYear=" + publishDate
                 + ", description='" + description + '\''
                 + ", publisher='" + publisher + '\''
                 + ", stockQuantity=" + stockQuantity

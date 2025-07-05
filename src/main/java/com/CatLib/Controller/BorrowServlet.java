@@ -19,23 +19,22 @@ import java.sql.Connection;
  *
  * @author DuyPhuc
  */
-@WebServlet(urlPatterns = {"/borrow"})
+@WebServlet(urlPatterns = {"/user/borrow"})
 public class BorrowServlet extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User loginedUser = MyUtils.getLoginedUser(req.getSession());
 
-        if (loginedUser == null || !loginedUser.isActive()) {
-            // Redirect (Chuyển hướng) tới trang login.
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
         Connection conn = MyUtils.getStoredConnection(req);
         String bookId = req.getParameter("id");
-        boolean isSuccess = OrderDAO.sendBorrow(conn, loginedUser.getUserId(), Integer.parseInt(bookId));
+        boolean isSuccess = OrderDAO.sendOrder(conn, loginedUser.getUserId(), Integer.parseInt(bookId));
         if (isSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/order");
+            resp.sendRedirect(req.getContextPath() + "/user/order?status=pending");
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/user/order?status=rejected");
         }
     }
 

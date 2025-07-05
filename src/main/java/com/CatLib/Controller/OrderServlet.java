@@ -16,37 +16,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author DuyPhuc
  */
-@WebServlet(urlPatterns = {"/order"})
+@WebServlet(urlPatterns = {"/user/order"})
 public class OrderServlet extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User loginedUser = MyUtils.getLoginedUser(req.getSession());
 
-        if (loginedUser == null || !loginedUser.isActive()) {
-            // Redirect (Chuyển hướng) tới trang login.
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
+        String status = req.getParameter("status");
+
         Connection conn = MyUtils.getStoredConnection(req);
-        List<OrderModel> orders = null;
-        try {
-            orders = OrderDAO.findApprovedOrder(conn, loginedUser);
-        } catch (SQLException ex) {
-            Logger.getLogger(OrderServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println(orders);
+        List<OrderModel> orders = OrderDAO.findOrderByStatus(conn, loginedUser, status);
+
         req.setAttribute("orders", orders);
-        
+        req.setAttribute("status", status);
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/views/orderView.jsp");
         dispatcher.forward(req, resp);
     }

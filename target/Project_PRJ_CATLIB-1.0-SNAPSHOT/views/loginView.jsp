@@ -35,11 +35,11 @@
       <form action="${pageContext.request.contextPath}/login" method="post" class="flex flex-col pt-6">
         <label for="username" class="mt-6 mb-2">Username</label>
         <input type="text" name="username" id="username"
-               class="bg-gray-100 rounded-[2rem] border-b-2 border-gray-300 focus:border-[#5f899f] outline-none py-1 px-2 ">
+               class="bg-gray-200 rounded-[2rem] border-b-2 border-gray-300 focus:border-[#5f899f] outline-none py-1 px-2 ">
 
         <label for="password" class="mt-6 mb-2">Password</label>
         <input type="password" name="password" id="password"
-               class="bg-gray-100 rounded-[2rem] border-b-2 border-gray-300 focus:border-[#5f899f] outline-none py-1 px-2 ">
+               class="bg-gray-200 rounded-[2rem] border-b-2 border-gray-300 focus:border-[#5f899f] outline-none py-1 px-2 ">
 
         <div class="pt-2 flex items-center gap-2">
           <!-- <a href=""></a> -->

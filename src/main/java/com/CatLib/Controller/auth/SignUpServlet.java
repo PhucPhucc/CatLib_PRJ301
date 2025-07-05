@@ -63,17 +63,13 @@ public class SignUpServlet extends HttpServlet {
             errorString = "Confirm password does not match!";
         } else {
             Connection conn = MyUtils.getStoredConnection(req);
-            try {
-                // Tìm user trong DB.
-                user = UserDAO.findUser(conn, userName);
-                if (user != null) {
-                    hasError = true;
-                    errorString = "User is exist";
-                }
-            } catch (SQLException e) {
+            // Tìm user trong DB.
+            user = UserDAO.findUser(conn, userName);
+            if (user != null) {
                 hasError = true;
-                errorString = e.getMessage();
+                errorString = "User is exist";
             }
+
         }
         // Trong trường hợp có lỗi,
         // forward (chuyển hướng) tới /WEB-INF/views/signUpView.jsp
@@ -96,18 +92,16 @@ public class SignUpServlet extends HttpServlet {
         else {
             int userId;
             Connection conn = MyUtils.getStoredConnection(req);
-            try {
-                // Tạo User trong DB
-                userId = UserDAO.createUser(conn, userName, password, email);
+            // Tạo User trong DB
+            userId = UserDAO.createUser(conn, userName, password, email);
+            if (userId != -1) {
+
                 user = new User(userId, userName, password, email);
                 HttpSession session = req.getSession();
                 MyUtils.storeLoginedUser(session, user);
-
-                // Redirect (Chuyển hướng) sang trang /home.
                 resp.sendRedirect(req.getContextPath() + "/home");
-            } catch (SQLException e) {
-                errorString = e.getMessage();
-                System.out.println(errorString);
+
+            } else {
                 RequestDispatcher dispatcher //
                         = this.getServletContext().getRequestDispatcher("/views/signUpView.jsp");
 

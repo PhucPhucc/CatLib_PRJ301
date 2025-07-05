@@ -8,94 +8,95 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Order Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-        }
-    </script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class'
-        }
-    </script>
-    <style>
-      html {
-          transition: background-color 0.5s ease, color 0.5s ease;
-      }
-
-      .smooth-transition {
-          transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-          transition-duration: 500ms;
-          transition-timing-function: ease-in-out;
-      }
-
-    </style> 
-  </head>
-  <body class="font-mono smooth-transition bg-[#c7f0fc] bg-center bg-no-repeat bg-cover min-h-screen dark:bg-gray-800 text-black dark:text-white">
-
-    <jsp:include page="_header.jsp"></jsp:include>
-
-        <main class="order_container">
-          <div class="order">
-            <div class="order_left">
-              <ul>
-                <li><a href="">order list</a></li>
-                <li><a href="">return list</a></li>
-                <li><a href="">all list</a></li>
-              </ul>
-            </div>
-            <div class="order_right">
-            <c:forEach items="${orders}" var="order" >
-                <div class="order_card">
-                  <div class="img_wraper">
-                    <img src="${order.imageUrl}" alt="hinh anh">
-                  </div>
-
-                  <div class="order_info">
-                    <p class="order_title">${order.title}</p>
-                    <p class="order_author">${order.authorName}</p>
-                    <p class="order_pushish">${order.publisher}</p>
-                    <p class="order_date">Borrow Date: <span> ${order.orderDate}</span></p>
-                    <p class="order_date">Return date: <span> ${order.returnDate}</span></p>
-                  </div>
-
-                  <div class="order_payment">
-                    <p class="order_price">Fee: 5.000VND/day</p>
-                    <p class="order_late">Late Fee: 10.000VND/day</p>
-                    <a href="">Order</a>
-                  </div>
-                </div>
-            </c:forEach>
-
-          </div>
-        </div>
-    </main>
-
-    <script>
-        document.querySelector('#orders a').classList.add("border-b-4");
-        document.querySelector('#home a').classList.remove("border-b-4");
-        document.querySelector('#about a').classList.remove("border-b-4");
-
-        const html = document.documentElement;
-        const btnDark = document.querySelector("#btn-dark");
-        if (html.classList.contains('dark')) {
-            btnDark.innerHTML = `<img class="size-6" src="https://img.icons8.com/?size=100&id=45475&format=png&color=ffffff" alt="do-not-disturb-2"/>`;
-        } else {
-            btnDark.innerHTML = `<img class="size-6" src="https://img.icons8.com/external-glyph-silhouettes-icons-papa-vector/78/external-Light-Mode-interface-glyph-silhouettes-icons-papa-vector.png" alt="external-Light-Mode-interface-glyph-silhouettes-icons-papa-vector"/>`;
-        }
-        function toggleDarkMode() {
-            html.classList.toggle('dark');
-            if (html.classList.contains('dark')) {
-                btnDark.innerHTML = `<img class="size-6" src="https://img.icons8.com/?size=100&id=45475&format=png&color=ffffff" alt="do-not-disturb-2"/>`;
-            } else {
-                btnDark.innerHTML = `<img class="size-6" src="https://img.icons8.com/external-glyph-silhouettes-icons-papa-vector/78/external-Light-Mode-interface-glyph-silhouettes-icons-papa-vector.png" alt="external-Light-Mode-interface-glyph-silhouettes-icons-papa-vector"/>`;
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Order Page</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
             }
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-        }
-    </script>
-  </body>
+        </script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class'
+            };
+        </script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/styles.css?v=<%= System.currentTimeMillis()%>"/>
+
+    </head>
+    <body
+        class="flex flex-col min-h-dvh font-mono smooth-transition bg-[#c7f0fc] bg-center bg-no-repeat bg-cover min-h-screen dark:bg-gray-800 text-[#5f899f] dark:text-white"
+        >
+
+        <jsp:include page="_header.jsp"></jsp:include>
+
+            <main class="relative flex-1 flex bg-neutral-200 rounded-tl-[3rem] dark:bg-neutral-800 ring smooth-transition">
+            <jsp:include page="_menuOrder.jsp"></jsp:include>
+
+
+                <div class="flex-[5]">
+                <c:forEach items="${orders}" var="order">
+                    <div class="flex relative p-4 border-b border-neutral-400">
+                        <div class="bg-white p-2 mr-6 rounded-lg w-[12rem]">
+                            <img class="w-full h-full" src="${order.imageUrl}" alt="${order.title}" />
+                        </div>
+                        <div class="flex flex-col justify-between flex-1 text-gray-500">
+                            <div>
+                                <p class="text-4xl font-bold text-[#5f899f] dark:text-gray-200">${order.title}</p>
+                                <p class="">${order.authorName}</p>
+                                <p><span>${order.publisher}</span> - <span>${order.publishYear}</span></p>
+                                <p class="text-sm">Borrow date: <span>${order.orderDate}</span></p>
+                                <p class="text-sm">Return date: <span>${order.returnDate}</span></p>
+                                <!--thêm if else đổi màu cho status-->
+                                <c:choose>
+                                    <c:when test="${order.status=='pending'}">
+                                        <p class="font-semibold">Status: <span  class="text-gray-700">Pending</span></p>
+                                        </c:when>
+                                        <c:when test="${order.status=='approved'}">
+                                        <p class="font-semibold">Status: <span  class="text-green-700">Approved</span></p>
+                                        </c:when>
+                                        <c:when test="${order.status=='rejected'}">
+                                        <p class="font-semibold">Status: <span  class="text-red-700">Rejected</span></p>
+                                        </c:when>
+                                        <c:when test="${order.status=='overdue'}">
+                                        <p class="font-semibold">Status: <span  class="text-yellow-700">Overdue</span></p>
+                                        </c:when>
+                                        <c:when test="${order.status=='returned'}">
+                                        <p class="font-semibold">Status: <span  class="text-green-700">Return</span></p>
+                                    </c:when>
+                                </c:choose>
+                            </div>
+
+
+                            <!-- <p>Book Available: <span  class="text-green-600">Available</span></p> -->
+                            <!--<p>Book Available: <span  class="text-red-600">Unavailable</span></p>-->
+                        </div>
+                        <c:choose>
+                            <c:when test="${order.status=='pending'}">
+                                <div class="absolute bottom-2 right-3 text-right">
+                                    <p class="text-gray-500">Status:</p>
+                                    <p class="text-gray-800 dark:text-gray-200">You may collect your book from the libary right now</p>
+                                </div>  
+                            </c:when>
+
+                            <c:when test="${order.status=='rejected'}">
+                                <div class="absolute bottom-2 right-3 text-right">
+                                    <p class="text-gray-500">Status:</p>
+                                    <p class="text-gray-800 dark:text-gray-200">The book you ordered is no longer available</p>
+                                </div> 
+                            </c:when>
+
+                        </c:choose>    
+
+
+                    </div>
+                </c:forEach>
+
+            </div>
+        </main>
+
+        <script src="${pageContext.request.contextPath}/script/main.js"></script>
+
+    </body>
 </html>

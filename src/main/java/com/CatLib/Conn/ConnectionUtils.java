@@ -21,14 +21,14 @@ public class ConnectionUtils {
     public static void closeQuietly(Connection conn) {
         try {
             conn.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
     }
 
     public static void rollbackQuietly(Connection conn) {
         try {
             conn.rollback();
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
     }
 }

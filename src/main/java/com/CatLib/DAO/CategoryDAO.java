@@ -17,21 +17,26 @@ import java.util.List;
  * @author DuyPhuc
  */
 public class CategoryDAO {
-    public static List<Category> findAllCategory(Connection conn) throws SQLException {
+
+    public static List<Category> findAllCategory(Connection conn) {
         String sql = "select * from Category";
+        try {
+            PreparedStatement pstm = conn.prepareStatement(sql);
 
-        PreparedStatement pstm = conn.prepareStatement(sql);
+            ResultSet rs = pstm.executeQuery();
+            List<Category> list = new ArrayList<>();
+            while (rs.next()) {
+                int id = Integer.parseInt(rs.getString("categoryId"));
+                String name = rs.getString("categoryName");
 
-        ResultSet rs = pstm.executeQuery();
-        List<Category> list = new ArrayList<>();
-        while (rs.next()) {
-            int id = Integer.parseInt(rs.getString("categoryId"));
-            String name = rs.getString("categoryName");
-         
-
-            Category category = new Category(id, name);
-            list.add(category);
+                Category category = new Category(id, name);
+                list.add(category);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
         }
-        return list;
+        return null;
+
     }
 }

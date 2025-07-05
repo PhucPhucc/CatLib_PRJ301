@@ -17,10 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -34,14 +31,9 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Connection conn = MyUtils.getStoredConnection(req);
-        List<Book> books = null; 
-        List<Category> categores = null;
-        try {
-            books = BookDAO.findAllBook(conn);
-            categores = CategoryDAO.findAllCategory(conn);
-        } catch (SQLException ex) {
-            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        List<Book> books = BookDAO.findAllBook(conn);
+        List<Category> categores = CategoryDAO.findAllCategory(conn);
+
         req.setAttribute("books", books);
         req.setAttribute("tags", categores);
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/views/homeView.jsp");

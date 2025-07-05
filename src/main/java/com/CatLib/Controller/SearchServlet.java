@@ -35,20 +35,16 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req, resp);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String input = req.getParameter("search");
-        List<Book> books = null;
-        List<Category> category = null;
+        Connection conn = MyUtils.getStoredConnection(req);
 
-        try {
-            Connection conn = MyUtils.getStoredConnection(req);
-            books = BookDAO.searchBookByInput(conn, input);
-            category = CategoryDAO.findAllCategory(conn);
-        } catch (SQLException ex) {
-            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        List<Book> books = BookDAO.searchBookByInput(conn, input);
+        List<Category> category = CategoryDAO.findAllCategory(conn);
+        System.out.println(input);
 
         if (books == null) {
             req.setAttribute("notFound", "not found");

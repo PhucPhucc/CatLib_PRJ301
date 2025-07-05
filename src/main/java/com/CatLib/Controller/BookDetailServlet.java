@@ -15,9 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -32,16 +29,11 @@ public class BookDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String bookId = req.getParameter("id");
         Connection conn = MyUtils.getStoredConnection(req);
-        Book book = null;
-        try {
-            book = BookDAO.findBookById(conn, bookId);
-        } catch (SQLException ex) {
-            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        Book book = BookDAO.findBookById(conn, bookId);
         req.setAttribute("book", book);
-        
+
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/views/detailView.jsp");
+
         dispatcher.forward(req, resp);
     }
 

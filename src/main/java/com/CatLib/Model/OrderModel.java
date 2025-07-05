@@ -29,7 +29,8 @@ public class OrderModel {
     private String publishYear;
     private String imageUrl;
 
-    public OrderModel(String title, String authorName, String publisher, String publishYear, Date orderDate, Date returnDate, String imageUrl) {
+    public OrderModel(int orderId, String title, String authorName, String publisher, String publishYear, Date orderDate, Date returnDate, String imageUrl, String status) {
+        this.orderId = orderId;
         this.orderDate = orderDate;
         this.returnDate = returnDate;
         this.title = title;
@@ -37,6 +38,8 @@ public class OrderModel {
         this.publisher = publisher;
         this.publishYear = publishYear;
         this.imageUrl = imageUrl;
+        this.status = status;
+
     }
 
     // Constructor

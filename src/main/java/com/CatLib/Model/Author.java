@@ -21,6 +21,13 @@ public class Author {
         this.story = story;
     }
 
+    public Author(int authorId, String name) {
+        this.authorId = authorId;
+        this.name = name;
+    }
+    
+    
+
     // Getters
     public int getAuthorId() {
         return authorId;

@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  *
@@ -39,7 +38,7 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
         String rememberMeStr = req.getParameter("remember");
         boolean remember = "Y".equals(rememberMeStr);
-        
+
         User user = null;
         boolean hasError = false;
         String errorString = null;
@@ -49,19 +48,14 @@ public class LoginServlet extends HttpServlet {
             errorString = "Required username and password!";
         } else {
             Connection conn = MyUtils.getStoredConnection(req);
-            try {
-                // Tìm user trong DB.
-                user = UserDAO.findUser(conn, userName, password);
-                System.out.println("tim thay user:" + user);
-                if (user == null) {
-                    hasError = true;
-                    errorString = "User Name or password invalid";
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            // Tìm user trong DB.
+            user = UserDAO.findUser(conn, userName, password);
+            System.out.println("tim thay user:" + user);
+            if (user == null || user.getRole() == null) {
                 hasError = true;
-                errorString = e.getMessage();
+                errorString = "User Name or password invalid";
             }
+
         }
         // Trong trường hợp có lỗi,
         // forward (chuyển hướng) tới /WEB-INF/views/login.jsp
@@ -83,8 +77,7 @@ public class LoginServlet extends HttpServlet {
         // Lưu thông tin người dùng vào Session.
         // Và chuyển hướng sang trang userInfo.
         else {
-            
-            
+
             HttpSession session = req.getSession();
             MyUtils.storeLoginedUser(session, user);
 
@@ -95,9 +88,12 @@ public class LoginServlet extends HttpServlet {
             else {
                 MyUtils.deleteUserCookie(resp);
             }
-
             // Redirect (Chuyển hướng) sang trang /userInfo.
-            resp.sendRedirect(req.getContextPath() + "/home");
+            if (user.getRole().equals("user")) {
+                resp.sendRedirect(req.getContextPath() + "/home");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/admin/dashboard");
+            }
         }
     }
 
