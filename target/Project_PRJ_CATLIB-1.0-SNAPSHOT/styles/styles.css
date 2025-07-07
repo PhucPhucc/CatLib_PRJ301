@@ -8,6 +8,13 @@ html {
     transition-timing-function: ease-in-out;
 }
 
+.line-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
 .line-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

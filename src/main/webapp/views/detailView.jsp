@@ -56,7 +56,7 @@
         </main>
 
 
-        <script src="${pageContext.request.contextPath}/script/main.js"></script>
+        <script src="${pageContext.request.contextPath}/script/home.js"></script>
 
     </body>
 </html>

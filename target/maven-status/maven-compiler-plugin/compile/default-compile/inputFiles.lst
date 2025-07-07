@@ -16,6 +16,7 @@ D:\Workspaces\java\CatLib_PRJ301\src\main\java\com\CatLib\Model\Book.java
 D:\Workspaces\java\CatLib_PRJ301\src\main\java\com\CatLib\Ultis\AdminUltil.java
 D:\Workspaces\java\CatLib_PRJ301\src\main\java\com\CatLib\Controller\auth\SignUpServlet.java
 D:\Workspaces\java\CatLib_PRJ301\src\main\java\com\CatLib\Filter\CookieFilter.java
+D:\Workspaces\java\CatLib_PRJ301\src\main\java\com\CatLib\Controller\admin\GetBookManagerServlet.java
 D:\Workspaces\java\CatLib_PRJ301\src\main\java\com\CatLib\Filter\UserFilter.java
 D:\Workspaces\java\CatLib_PRJ301\src\main\java\com\CatLib\Controller\admin\AddBookManagerServlet.java
 D:\Workspaces\java\CatLib_PRJ301\src\main\java\com\CatLib\Controller\admin\DashBoardServlet.java

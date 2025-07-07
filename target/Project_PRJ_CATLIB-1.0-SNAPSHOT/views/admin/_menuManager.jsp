@@ -27,20 +27,6 @@
         <li>
             <a
                 href="${pageContext.request.contextPath}/admin/dashboard"
-                class="hover:font-semibold hover:underline hover:underline-offset-2 block pb-1"
-                >Authors</a
-            >
-        </li>
-        <li>
-            <a
-                href="${pageContext.request.contextPath}/admin/dashboard"
-                class="hover:font-semibold hover:underline hover:underline-offset-2 block pb-1"
-                >Categories</a
-            >
-        </li>
-        <li>
-            <a
-                href="${pageContext.request.contextPath}/admin/dashboard"
                 class="hover:font-semibold hover:underline hover:underline-offset-2 block"
                 >Users</a
             >

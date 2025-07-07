@@ -15,7 +15,7 @@ import java.sql.Date;
 public class AdminUltil {
     public static Book GetBookDoPost(HttpServletRequest req) {
         String title = req.getParameter("title");
-        String publishDate = req.getParameter("publishYear");
+        String publishDate = req.getParameter("publishDate");
         String publisher = req.getParameter("publisher");
         String stockQuantity = req.getParameter("stockQuantity");
         String description = req.getParameter("description");

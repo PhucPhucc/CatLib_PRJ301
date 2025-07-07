@@ -49,15 +49,14 @@
                             </button>
                         </div>
                         <div>
-                            <form action="get" method="">
-                                <input
-                                    class="border-2 border-neutral-800 py-1 px-2 rounded-lg w-96"
-                                    type="text"
-                                    placeholder="search"
-                                    name="search"
-                                    />
-                                <button type="submit"  class="py-1 px-2 rounded-md bg-neutral-500 border-2 border-neutral-500 hover:bg-neutral-700 text-white">Search</button>
-                            </form>
+                            <input
+                                id="searchBook"
+                                class="border-2 border-neutral-800 py-1 px-2 rounded-lg w-96"
+                                type="text"
+                                placeholder="search"
+                                name="search"
+                                autocomplete="off"
+                                />
                         </div>
                     </div>
                     <!-- component -->
@@ -94,7 +93,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="block md:table-row-group">
+                            <tbody id="table_body" class="block md:table-row-group">
                             <c:forEach items="${books}" var="book" >
                                 <tr
                                     class="bg-gray-300 border border-grey-500 md:border-none block md:table-row"
@@ -162,7 +161,7 @@
 
         <dialog
             id="book"
-            class="abolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg m-0 w-1/2 rounded-[2rem]"
+            class="abolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white shadow-lg m-0 w-3/5 rounded-[2rem]"
             >
             <form id="form-book" class="py-2 px-4 w-full flex text-[#5f899f] gap-6" method="post" action="${pageContext.request.contextPath}/admin/book-manager/add">
                 <div class="w-3/6 flex flex-col p-2">
@@ -176,9 +175,9 @@
                         />
                     <div class="flex gap-4">
                         <div class="flex flex-col flex-1">
-                            <label for="publishYear"> Publish Year </label>
+                            <label for="publishDate"> Publish Year </label>
                             <input
-                                name="publishYear"
+                                name="publishDate"
                                 type="date"
                                 class="py-1 px-3 m2-1 mb-4 bg-gray-200 rounded-[1rem]"
                                 id="publishDate"
@@ -197,28 +196,19 @@
                         </div>
                     </div>
                     <div class="flex gap-4">
-                        <div class="flex flex-col flex-1">
-                            <label for="">Category</label>
-                            <select
-                                name="category"
-                                class="pt-1 pb-[0.3rem] px-3 m2-1 mb-4 bg-gray-200 rounded-[1rem]"
-
-                                >
-                                <c:forEach  items="${categories}" var="category" >
-                                    <option value="${category.categoryId}" class="category">${category.name}</option>
-                                </c:forEach>
-                            </select>
+                        <div class="flex flex-col flex-1 relative">
+                            <label for="categories">Category</label>
+                            <input autocomplete="off" name="categories" type="text" id="categories" oninput="suggest(this)" class="w-full py-1 px-3 mt-1 mb-4 bg-gray-200 rounded-[1rem]"/>
+                            <ul
+                                id="categoriesSuggestion"
+                                class="absolute top-full bg-white hidden border rounded shadow-lg z-10 w-full"></ul>
                         </div>
-                        <div class="flex flex-col flex-1">
-                            <label for="">Author</label>
-                            <select
-                                name="author"
-                                class="pt-1 pb-[0.3rem] px-3 m2-1 mb-4 bg-gray-200 rounded-[1rem]"
-                                >
-                                <c:forEach  items="${authors}" var="author" >
-                                    <option value="${author.authorId}" class="author">${author.name}</option>
-                                </c:forEach>
-                            </select>
+                        <div class="flex flex-col flex-1 relative">
+                            <label for="authors">Author</label>
+                            <input autocomplete="off" name="authors" type="text" id="authors" oninput="suggest(this)" class="w-full py-1 px-3 mt-1 mb-4 bg-gray-200 rounded-[1rem]"/>
+                            <ul
+                                id="authorsSuggestion"
+                                class="absolute top-full bg-white hidden border rounded shadow-lg z-10 w-full"></ul>
                         </div>
                     </div>
 
@@ -290,7 +280,7 @@
                 </div>
             </form>
         </dialog>
-        <<script>
+        <script>
             if (${not empty message}) {
                 alert("${message}");
             }

@@ -105,8 +105,6 @@
         const currentPath = window.location.pathname;
         document.querySelectorAll(".menu-link").forEach((link) => {
             const href = link.getAttribute("href");
-            console.log(href);
-            console.log(currentPath);
             if (href === currentPath) {
                 const line = link.querySelector(".line");
                 line.classList.add("left-0", "w-full", "translate-x-0");

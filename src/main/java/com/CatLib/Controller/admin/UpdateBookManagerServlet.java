@@ -8,6 +8,8 @@ import com.CatLib.DAO.BookDAO;
 import com.CatLib.Model.Book;
 import com.CatLib.Ultis.AdminUltil;
 import com.CatLib.Ultis.MyUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,32 +35,25 @@ public class UpdateBookManagerServlet extends HttpServlet {
         Connection conn = MyUtils.getStoredConnection(req);
         Book book = BookDAO.findBookById(conn, bookId);
 
-        StringBuilder json = new StringBuilder();
-        json.append("[{");
-        json.append("\"bookId\":\"").append(book.getBookId()).append("\",");
-        json.append("\"title\":\"").append(book.getTitle()).append("\",");
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd") // định dạng đúng theo chuẩn input type="date"
+                .create();
 
-        json.append("\"publishDate\":\"").append(book.getPublishDate().toString()).append("\",");
-        json.append("\"publisher\":\"").append(book.getPublisher()).append("\",");
-        json.append("\"categoryName\":\"").append(book.getCategoryName()).append("\",");
-        json.append("\"authorName\":\"").append(book.getAuthorName()).append("\",");
-        json.append("\"stockQuantity\":\"").append(book.getStockQuantity()).append("\",");
-        json.append("\"description\":\"").append(book.getDescription()).append("\",");
-        json.append("\"imageURL\":\"").append(book.getUrlImage()).append("\"");
-        json.append("}]");
-        out.write(json.toString());
+        String jsonBook = gson.toJson(book);
+        out.write(jsonBook);
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String bookId = req.getParameter("id");
-        String categoryId = req.getParameter("category");
-        String authorId = req.getParameter("author");
+        String categoryId = req.getParameter("categories");
+        String authorId = req.getParameter("authors");
         Book book = AdminUltil.GetBookDoPost(req);
+        book.setBookId(Integer.parseInt(bookId));
         Connection conn = MyUtils.getStoredConnection(req);
-        boolean isUpdate = BookDAO.updateBook(conn, book, bookId, categoryId, authorId);
+        boolean isUpdate = BookDAO.updateBook(conn, book, categoryId, authorId);
         HttpSession session = req.getSession();
-
         if (isUpdate) {
             session.setAttribute("message", book.getTitle() + " has been successfully updated");
         } else {

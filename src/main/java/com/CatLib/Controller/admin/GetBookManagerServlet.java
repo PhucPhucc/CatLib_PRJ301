@@ -17,7 +17,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -28,29 +27,30 @@ import java.util.Map;
  *
  * @author tvphu
  */
-@WebServlet(urlPatterns = {"/admin/book-manager"})
-public class BookManagerServlet extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
+@WebServlet(urlPatterns = {"/admin/book-manager/get-book"})
+public class GetBookManagerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
         Connection conn = MyUtils.getStoredConnection(req);
         List<Book> books = BookDAO.findAllBook(conn);
 
+        List<Category> categories = CategoryDAO.findAllCategory(conn);
+        List<Author> authors = AuthorDAO.findAllAuthor(conn);
 
-        req.setAttribute("books", books);
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("books", books);
+        responseData.put("categories", categories);
+        responseData.put("authors", authors);
 
-        HttpSession session = req.getSession(false);
-        if (session != null) {
-            String message = (String) session.getAttribute("message");
-            if (message != null) {
-                req.setAttribute("message", message);
-                session.removeAttribute("message");
-            }
-        }
+        Gson gson = new Gson();
+        String finalJson = gson.toJson(responseData);
 
-        this.getServletContext().getRequestDispatcher("/views/admin/bookManagerView.jsp").forward(req, resp);
+        resp.getWriter().write(finalJson);
+
     }
 
 }

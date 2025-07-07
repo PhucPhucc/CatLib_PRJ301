@@ -1,53 +1,45 @@
-﻿-- Dữ liệu mẫu cho bảng Category
-INSERT INTO Category (categoryName) VALUES
-(N'Tiểu thuyết'),
+﻿-- Dữ liệu cho bảng Category
+INSERT INTO Category (CategoryName) VALUES
+(N'Công nghệ thông tin'),
+(N'Văn học'),
+(N'Kinh tế'),
 (N'Khoa học'),
-(N'Lịch sử'),
-(N'Tự truyện'),
-(N'Truyện tranh');
+(N'Kỹ năng sống');
 
--- Dữ liệu mẫu cho bảng Author
-INSERT INTO Author (AuthorName, Story) VALUES
-(N'Nguyễn Nhật Ánh', N'Nguyễn Nhật Ánh là nhà văn nổi tiếng với các tác phẩm về tuổi học trò.'),
-(N'Stephen Hawking', N'Stephen Hawking là nhà vật lý lý thuyết và vũ trụ học người Anh.'),
-(N'Trần Trọng Kim', N'Trần Trọng Kim là một học giả, nhà sử học và chính khách Việt Nam.'),
-(N'Nguyễn Du', N'Nguyễn Du là đại thi hào dân tộc Việt Nam, tác giả của Truyện Kiều.'),
-(N'Tô Hoài', N'Tô Hoài là nhà văn Việt Nam nổi tiếng với Dế Mèn Phiêu Lưu Ký.');
+-- Dữ liệu cho bảng Author
+INSERT INTO Author (AuthorName) VALUES
+(N'Nguyễn Nhật Ánh'),
+(N'Dale Carnegie'),
+(N'Yuval Noah Harari'),
+(N'J.K. Rowling'),
+(N'Robert C. Martin');
 
--- Dữ liệu mẫu cho bảng Book
-INSERT INTO Book (BookID, Title, Price, PublishYear, Description, Publisher, StockQuantity, CategoryID, AuthorID) VALUES
-(201, N'Mắt Biếc', 95000.00, 2017, N'Câu chuyện tình yêu đầy lãng mạn và buồn của Ngạn và Hà Lan.', N'Nhà Xuất Bản Trẻ', 50, 1, 101),
-(202, N'Lược Sử Thời Gian', 120000.00, 1988, N'Giải thích những khái niệm phức tạp của vật lý vũ trụ một cách dễ hiểu.', N'Nhà Xuất Bản Khoa Học và Kỹ Thuật', 30, 2, 102),
-(203, N'Việt Nam Sử Lược', 150000.00, 1920, N'Tóm tắt lịch sử Việt Nam từ khởi thủy đến đầu thế kỷ 20.', N'Nhà Xuất Bản Văn Hóa', 25, 3, 103),
-(204, N'Cho Tôi Xin Một Vé Đi Tuổi Thơ', 80000.00, 2008, N'Những câu chuyện hồn nhiên, trong trẻo về tuổi thơ.', N'Nhà Xuất Bản Kim Đồng', 60, 1, 101),
-(205, N'Nhà Giả Kim', 75000.00, 1988, N'Câu chuyện về hành trình tìm kiếm kho báu và ý nghĩa cuộc sống.', N'Nhà Xuất Bản Văn Học', 45, 1, 104); -- Sử dụng AuthorID 104 tạm thời vì đây là tác phẩm dịch
-
--- Dữ liệu mẫu cho bảng Book_Author (để xử lý sách có nhiều tác giả hoặc để liên kết rõ ràng hơn)
--- Giả định Mắt Biếc của Nguyễn Nhật Ánh
-INSERT INTO Book_Author (BookID, AuthorID) VALUES (201, 101);
--- Giả định Lược Sử Thời Gian của Stephen Hawking
-INSERT INTO Book_Author (BookID, AuthorID) VALUES (202, 102);
--- Giả định Việt Nam Sử Lược của Trần Trọng Kim
-INSERT INTO Book_Author (BookID, AuthorID) VALUES (203, 103);
--- Giả định Cho Tôi Xin Một Vé Đi Tuổi Thơ của Nguyễn Nhật Ánh
-INSERT INTO Book_Author (BookID, AuthorID) VALUES (204, 101);
--- Giả định Nhà Giả Kim không có tác giả trong danh sách, nên có thể bỏ qua hoặc thêm tác giả tương ứng (ví dụ Paulo Coelho)
--- INSERT INTO Book_Author (BookID, AuthorID) VALUES (205, [ID của Paulo Coelho]);
-
--- Dữ liệu mẫu cho bảng Users
+-- Dữ liệu cho bảng Users
 INSERT INTO Users (username, password, full_name, role, is_active, email, phone) VALUES
-(N'admin', N'123', N'Nguyễn Văn Cường', N'admin', 1, N'cuong.nguyen@example.com', N'0912345678'),
-(N'user1', N'123', N'Trần Thị Lan', N'user', 1, N'lan.tran@example.com', N'0987654321'),
-(N'user_minh', N'password123', N'Lê Minh', N'user', 1, N'minh.le@example.com', N'0901122334'),
-(N'admin_huong', N'password123', N'Phạm Thị Hương', N'admin', 1, N'huong.pham@example.com', N'0900001111');
+('admin', 'hashed_password_admin', N'Nguyễn Văn A', 'admin', 1, 'admin@example.com', '0123456789'),
+('student', 'hashed_password_user', N'Trần Thị B', 'user', 1, 'student@example.com', '0987654321'),
+('anotheruser', 'hashed_password_another', N'Lê Văn C', 'user', 0, 'anotheruser@example.com', '0123123123');
 
--- Dữ liệu mẫu cho bảng [Order]
--- Lưu ý: UserID cho bảng [Order] sẽ tự động tăng (IDENTITY), nên không cần chỉ định.
--- Cần cập nhật UserID dựa trên các giá trị tự động tạo.
--- Để đơn giản, tôi sẽ giả định các UserID được tạo là 1, 2, 3, 4 theo thứ tự chèn trên.
-INSERT INTO BookOrders (OrderID, UserID, BookID, OrderDate, ReturnDate, ActualReturnDate, Bill, Status) VALUES
-(301, 1, 201, '2024-05-01', '2024-05-15', '2024-05-14', 95000.00, N'returned'),
-(302, 2, 202, '2024-05-05', '2024-05-20', NULL, 120000.00, N'approved'),
-(303, 3, 203, '2024-05-10', '2024-05-25', NULL, 150000.00, N'pending'),
-(304, 2, 204, '2024-04-20', '2024-05-05', NULL, 80000.00, N'overdue'),
-(305, 1, 205, '2024-06-01', '2024-06-10', NULL, 75000.00, N'pending');
+-- Dữ liệu cho bảng Book
+INSERT INTO Book (Title, PublishDate, [Description], Publisher, StockQuantity, CategoryID, ImageURL) VALUES
+(N'Lập trình Java cơ bản', '2022-01-15', N'Sách dạy lập trình Java từ những khái niệm đầu tiên.', N'NXB Giáo Dục', 10, 1, 'http://example.com/images/java_basic.jpg'),
+(N'Cho tôi xin một vé đi tuổi thơ', '2008-03-24', N'Một tác phẩm văn học nổi tiếng của Nguyễn Nhật Ánh.', N'NXB Trẻ', 15, 2, 'http://example.com/images/cho_toi_xin_mot_ve.jpg'),
+(N'Đắc nhân tâm', '1936-10-01', N'Nghệ thuật thu phục lòng người.', N'NXB Tổng hợp TP.HCM', 20, 5, 'http://example.com/images/dac_nhan_tam.jpg'),
+(N'Sapiens: Lược sử loài người', '2011-01-01', N'Khám phá lịch sử phát triển của loài người.', N'NXB Tri Thức', 8, 4, 'http://example.com/images/sapiens.jpg'),
+(N'Clean Code', '2008-08-01', N'Cẩm nang về viết mã sạch.', N'Prentice Hall', 5, 1, 'http://example.com/images/clean_code.jpg'),
+(N'Kinh tế học vĩ mô', '2020-05-20', N'Các nguyên lý cơ bản của kinh tế học vĩ mô.', N'NXB Kinh Tế Quốc Dân', 12, 3, 'http://example.com/images/kinh_te_vi_mo.jpg');
+
+
+-- Dữ liệu cho bảng Book_Author (Mối quan hệ nhiều-nhiều)
+INSERT INTO Book_Author (BookID, AuthorID) VALUES
+(2, 1), -- Cho tôi xin một vé đi tuổi thơ - Nguyễn Nhật Ánh
+(3, 2), -- Đắc nhân tâm - Dale Carnegie
+(4, 3), -- Sapiens: Lược sử loài người - Yuval Noah Harari
+(5, 5); -- Clean Code - Robert C. Martin
+
+-- Dữ liệu cho bảng BookOrders
+INSERT INTO BookOrders (UserID, BookID, OrderDate, ReturnDate, ActualReturnDate, Bill, Status) VALUES
+(2, 1, '2025-06-01', '2025-06-15', '2025-06-14', 0.00, 'returned'),
+(2, 3, '2025-06-20', '2025-07-04', NULL, 0.00, 'approved'),
+(3, 2, '2025-06-25', '2025-07-09', NULL, 0.00, 'pending'),
+(2, 4, '2025-05-10', '2025-05-24', '2025-05-28', 15000.00, 'overdue');

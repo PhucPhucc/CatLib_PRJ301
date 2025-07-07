@@ -5,7 +5,6 @@
 package com.CatLib.DAO;
 
 import com.CatLib.Model.Author;
-import com.CatLib.Model.Book;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

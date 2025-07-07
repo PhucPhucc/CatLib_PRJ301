@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -52,10 +53,6 @@ public class BookDAO {
     }
 
     public static Book findBookById(Connection conn, String bookId) {
-//        String sql = "select book_id, title, [description], image_url, author_name \n"
-//                + "from Books\n"
-//                + "join AUTHORS on books.author_id = AUTHORS.author_id\n"
-//                + "where books.book_id = ?";
         String sql = "select * from Book\n"
                 + "join Book_Author on Book.BookID = Book_Author.BookID\n"
                 + "join AUTHOR on AUTHOR.authorId = Book_Author.authorId\n"
@@ -135,126 +132,232 @@ public class BookDAO {
         return null;
     }
 
-    public static void createBook(Connection conn, Book book, String categoryId, String authorId) {
-        String sql = "insert into Book (title, publishDate, publisher, stockQuantity, description, imageURL, categoryId, authorId) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)\n"
-                + "SELECT SCOPE_IDENTITY() AS NewBookID;";
-//                + "insert into Book_Author (BookID, AuthorID) VALUES (?, ?)";
+    public static boolean createBook(Connection conn, Book book, String categoryName, String authorName) {
         try {
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            pstm.setString(1, book.getTitle());
-            pstm.setDate(2, book.getPublishDate());
-            pstm.setString(3, book.getPublisher());
-            pstm.setInt(4, book.getStockQuantity());
-            pstm.setString(5, book.getDescription());
-            pstm.setString(6, book.getUrlImage());
-            pstm.setString(7, categoryId);
-            pstm.setString(8, authorId);
+            conn.setAutoCommit(false); // Bắt đầu transaction
 
-            ResultSet rs = pstm.executeQuery();
-            if (rs.next()) {
-                int bookId = rs.getInt("NewBookID");
-                String newSQL = "insert into Book_Author (BookID, AuthorID) VALUES (?, ?)";
-                PreparedStatement pstmNew = conn.prepareStatement(newSQL);
-                pstmNew.setInt(1, bookId);
-                pstmNew.setString(2, authorId);
-                pstmNew.executeUpdate();
+            // 1. Kiểm tra category
+            int categoryId = -1;
+            String checkCategorySQL = "SELECT CategoryID FROM Category WHERE CategoryName = ?";
+            PreparedStatement checkCategoryStmt = conn.prepareStatement(checkCategorySQL);
+            checkCategoryStmt.setString(1, categoryName);
+            ResultSet categoryRS = checkCategoryStmt.executeQuery();
+            if (categoryRS.next()) {
+                categoryId = categoryRS.getInt("CategoryID");
+            } else {
+                String insertCategorySQL = "INSERT INTO Category (CategoryName) VALUES (?)";
+                PreparedStatement insertCategoryStmt = conn.prepareStatement(insertCategorySQL, Statement.RETURN_GENERATED_KEYS);
+                insertCategoryStmt.setString(1, categoryName);
+                insertCategoryStmt.executeUpdate();
+                ResultSet generatedKeys = insertCategoryStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    categoryId = generatedKeys.getInt(1);
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
+            // 2. Kiểm tra author
+            int authorId = -1;
+            String checkAuthorSQL = "SELECT AuthorID FROM Author WHERE AuthorName = ?";
+            PreparedStatement checkAuthorStmt = conn.prepareStatement(checkAuthorSQL);
+            checkAuthorStmt.setString(1, authorName);
+            ResultSet authorRS = checkAuthorStmt.executeQuery();
+            if (authorRS.next()) {
+                authorId = authorRS.getInt("AuthorID");
+            } else {
+                String insertAuthorSQL = "INSERT INTO Author (AuthorName) VALUES (?)";
+                PreparedStatement insertAuthorStmt = conn.prepareStatement(insertAuthorSQL, Statement.RETURN_GENERATED_KEYS);
+                insertAuthorStmt.setString(1, authorName);
+                insertAuthorStmt.executeUpdate();
+                ResultSet generatedKeys = insertAuthorStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    authorId = generatedKeys.getInt(1);
+                }
+            }
+
+            // 3. Insert Book (KHÔNG còn AuthorID)
+            String insertBookSQL = "INSERT INTO Book (title, publishDate, publisher, stockQuantity, description, imageURL, categoryId) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement insertBookStmt = conn.prepareStatement(insertBookSQL, Statement.RETURN_GENERATED_KEYS);
+            insertBookStmt.setString(1, book.getTitle());
+            insertBookStmt.setDate(2, book.getPublishDate());
+            insertBookStmt.setString(3, book.getPublisher());
+            insertBookStmt.setInt(4, book.getStockQuantity());
+            insertBookStmt.setString(5, book.getDescription());
+            insertBookStmt.setString(6, book.getUrlImage());
+            insertBookStmt.setInt(7, categoryId);
+            insertBookStmt.executeUpdate();
+
+            ResultSet bookKeys = insertBookStmt.getGeneratedKeys();
+            if (bookKeys.next()) {
+                int bookId = bookKeys.getInt(1);
+
+                // 4. Insert vào bảng Book_Author
+                String insertBookAuthorSQL = "INSERT INTO Book_Author (BookID, AuthorID) VALUES (?, ?)";
+                PreparedStatement bookAuthorStmt = conn.prepareStatement(insertBookAuthorSQL);
+                bookAuthorStmt.setInt(1, bookId);
+                bookAuthorStmt.setInt(2, authorId);
+                bookAuthorStmt.executeUpdate();
+            }
+
+            conn.commit(); // Commit transaction
+            return true;
+        } catch (SQLException e) {
+            try {
+                conn.rollback(); // Rollback nếu có lỗi
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
-    public static boolean updateBook(Connection conn, Book book, String bookId, String categoryId, String authorId) {
-        String sql = "UPDATE Book SET "
-                + "title = ?, "
-                + "publishDate = ?, "
-                + "publisher = ?, "
-                + "stockQuantity = ?, "
-                + "description = ?, "
-                + "imageURL = ?, "
-                + "categoryId = ?, "
-                + "authorId = ? "
-                + "WHERE bookID = ?";
-
+    public static boolean updateBook(Connection conn, Book book, String categoryName, String authorName) {
         try {
-            PreparedStatement pstm = conn.prepareStatement(sql);
-            pstm.setString(1, book.getTitle());
-            pstm.setDate(2, book.getPublishDate());
-            pstm.setString(3, book.getPublisher());
-            pstm.setInt(4, book.getStockQuantity());
-            pstm.setString(5, book.getDescription());
-            pstm.setString(6, book.getUrlImage());
-            pstm.setString(7, categoryId);
-            pstm.setString(8, authorId);
-            pstm.setString(9, bookId); // giả sử có hàm getBookId()
+            conn.setAutoCommit(false);
 
-            int affectedRows = pstm.executeUpdate();
-            if (affectedRows > 0) {
-                System.out.println("Đã xóa sách thành công.");
-                // Nếu bảng Book_Author tồn tại và cần cập nhật (nếu có cấu trúc riêng), thực hiện tiếp
-                String updateAuthorSQL = "UPDATE Book_Author SET AuthorID = ? WHERE BookID = ?";
-                PreparedStatement pstmAuthor = conn.prepareStatement(updateAuthorSQL);
-                pstmAuthor.setString(1, authorId);
-                pstmAuthor.setInt(2, book.getBookId());
-                pstmAuthor.executeUpdate();
-                return true;
+            // 1. Kiểm tra category
+            int categoryId = -1;
+            String checkCategorySQL = "SELECT CategoryID FROM Category WHERE CategoryName = ?";
+            PreparedStatement checkCategoryStmt = conn.prepareStatement(checkCategorySQL);
+            checkCategoryStmt.setString(1, categoryName);
+            ResultSet categoryRS = checkCategoryStmt.executeQuery();
+            if (categoryRS.next()) {
+                categoryId = categoryRS.getInt("CategoryID");
             } else {
-                System.out.println("Không tìm thấy sách với ID này.");
+                String insertCategorySQL = "INSERT INTO Category (CategoryName) VALUES (?)";
+                PreparedStatement insertCategoryStmt = conn.prepareStatement(insertCategorySQL, Statement.RETURN_GENERATED_KEYS);
+                insertCategoryStmt.setString(1, categoryName);
+                insertCategoryStmt.executeUpdate();
+                ResultSet generatedKeys = insertCategoryStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    categoryId = generatedKeys.getInt(1);
+                }
+            }
+
+            // 2. Kiểm tra author
+            int authorId = -1;
+            String checkAuthorSQL = "SELECT AuthorID FROM Author WHERE AuthorName = ?";
+            PreparedStatement checkAuthorStmt = conn.prepareStatement(checkAuthorSQL);
+            checkAuthorStmt.setString(1, authorName);
+            ResultSet authorRS = checkAuthorStmt.executeQuery();
+            if (authorRS.next()) {
+                authorId = authorRS.getInt("AuthorID");
+            } else {
+                String insertAuthorSQL = "INSERT INTO Author (AuthorName) VALUES (?)";
+                PreparedStatement insertAuthorStmt = conn.prepareStatement(insertAuthorSQL, Statement.RETURN_GENERATED_KEYS);
+                insertAuthorStmt.setString(1, authorName);
+                insertAuthorStmt.executeUpdate();
+                ResultSet generatedKeys = insertAuthorStmt.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    authorId = generatedKeys.getInt(1);
+                }
+            }
+            
+            // Cập nhật Book
+            String updateBookSQL = "UPDATE Book SET title = ?, publishDate = ?, publisher = ?, stockQuantity = ?, description = ?, imageURL = ?, categoryId = ? WHERE bookId = ?";
+            PreparedStatement updateBookStmt = conn.prepareStatement(updateBookSQL);
+            updateBookStmt.setString(1, book.getTitle());
+            updateBookStmt.setDate(2, book.getPublishDate());
+            updateBookStmt.setString(3, book.getPublisher());
+            updateBookStmt.setInt(4, book.getStockQuantity());
+            updateBookStmt.setString(5, book.getDescription());
+            updateBookStmt.setString(6, book.getUrlImage());
+            updateBookStmt.setInt(7, categoryId);
+            updateBookStmt.setInt(8, book.getBookId());
+            int affected = updateBookStmt.executeUpdate();
+
+            if (affected == 0) {
                 return false;
             }
 
+            // Xóa author cũ, gán author mới
+            String deleteOld = "DELETE FROM Book_Author WHERE BookID = ?";
+            PreparedStatement deleteStmt = conn.prepareStatement(deleteOld);
+            deleteStmt.setInt(1, book.getBookId());
+            deleteStmt.executeUpdate();
+
+            String insertNew = "INSERT INTO Book_Author (BookID, AuthorID) VALUES (?, ?)";
+            PreparedStatement insertStmt = conn.prepareStatement(insertNew);
+            insertStmt.setInt(1, book.getBookId());
+            insertStmt.setInt(2, authorId);
+            insertStmt.executeUpdate();
+
+            conn.commit();
+            return true;
+
         } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public static boolean deleteBook(Connection conn, String bookId) {
         try {
-            // 1. Kiểm tra xem có người đang mượn sách không
-            String checkSQL = "SELECT COUNT(*) FROM BookOrders "
-                    + "WHERE BookID = ? AND Status IN ('pending', 'approved', 'overdue')";
+            // Kiểm tra trạng thái đơn hàng
+            String checkSQL = "SELECT COUNT(*) FROM BookOrders WHERE BookID = ? AND Status IN ('pending', 'approved', 'overdue')";
             PreparedStatement checkStmt = conn.prepareStatement(checkSQL);
             checkStmt.setString(1, bookId);
             ResultSet rs = checkStmt.executeQuery();
-
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                if (count > 0) {
-                    System.out.println("Không thể xóa sách này vì hiện đang có người mượn hoặc chờ xử lý.");
-                    return false;
-                }
+            if (rs.next() && rs.getInt(1) > 0) {
+                return false; // đang mượn → không xóa
             }
 
-            // 2. Xóa trong BookOrders (các đơn đã rejected hoặc returned, nếu có)
+            conn.setAutoCommit(false);
+
+            // Xóa đơn hàng đã trả hoặc bị từ chối
             String deleteOrdersSQL = "DELETE FROM BookOrders WHERE BookID = ?";
-            PreparedStatement pstmOrders = conn.prepareStatement(deleteOrdersSQL);
-            pstmOrders.setString(1, bookId);
-            pstmOrders.executeUpdate();
+            PreparedStatement deleteOrders = conn.prepareStatement(deleteOrdersSQL);
+            deleteOrders.setString(1, bookId);
+            deleteOrders.executeUpdate();
 
-            // 3. Xóa trong Book_Author
-            String deleteBookAuthorSQL = "DELETE FROM Book_Author WHERE BookID = ?";
-            PreparedStatement pstmBookAuthor = conn.prepareStatement(deleteBookAuthorSQL);
-            pstmBookAuthor.setString(1, bookId);
-            pstmBookAuthor.executeUpdate();
+            // Xóa liên kết tác giả
+            String deleteBookAuthor = "DELETE FROM Book_Author WHERE BookID = ?";
+            PreparedStatement deleteBA = conn.prepareStatement(deleteBookAuthor);
+            deleteBA.setString(1, bookId);
+            deleteBA.executeUpdate();
 
-            // 4. Xóa trong Book
+            // Xóa Book
             String deleteBookSQL = "DELETE FROM Book WHERE BookID = ?";
-            PreparedStatement pstmBook = conn.prepareStatement(deleteBookSQL);
-            pstmBook.setString(1, bookId);
-            int affectedRows = pstmBook.executeUpdate();
+            PreparedStatement deleteBook = conn.prepareStatement(deleteBookSQL);
+            deleteBook.setString(1, bookId);
+            int result = deleteBook.executeUpdate();
 
-            if (affectedRows > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            conn.commit();
+
+            return result > 0;
 
         } catch (SQLException e) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 

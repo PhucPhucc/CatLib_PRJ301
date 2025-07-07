@@ -8,20 +8,17 @@ CREATE TABLE Category (
 CREATE TABLE Author (
     AuthorID INT IDENTITY(1,1) PRIMARY KEY,
     AuthorName NVARCHAR(100) NOT NULL,
-    Story NTEXT
 );
 CREATE TABLE Book ( 
     BookID INT IDENTITY(1,1) PRIMARY KEY, 
     Title NVARCHAR(255) NOT NULL,
     PublishDate Date,
-    Description NTEXT,
+    [Description] NTEXT,
     Publisher NVARCHAR(255),
     StockQuantity INT NOT NULL,
     CategoryID INT,
-	AuthorID INT,
     ImageURL NVARCHAR(max),
     FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID),
-    FOREIGN KEY (AuthorID) REFERENCES Author(AuthorID)
 );
 CREATE TABLE Book_Author (
     BookID INT,

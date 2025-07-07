@@ -96,7 +96,7 @@
             </div>
         </main>
 
-        <script src="${pageContext.request.contextPath}/script/main.js"></script>
+        <!--<script src="${pageContext.request.contextPath}/script/main.js"></script>-->
 
     </body>
 </html>
