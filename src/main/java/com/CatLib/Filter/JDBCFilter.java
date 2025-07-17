@@ -42,10 +42,7 @@ public class JDBCFilter implements Filter {
 
     // Kiểm tra mục tiêu của request hiện tại là 1 Servlet?
     private boolean needJDBC(HttpServletRequest request) {
-        System.out.println("JDBC Filter");
-        // 
-        // Servlet Url-pattern: /spath/*
-        // 
+  
         // => /spath
         String servletPath = request.getServletPath();
         // => /abc/mnp
@@ -58,12 +55,9 @@ public class JDBCFilter implements Filter {
             urlPattern = servletPath + "/*";
         }
         
-        // Key: servletName.
-        // Value: ServletRegistration
         Map<String, ? extends ServletRegistration> servletRegistrations = 
                 request.getServletContext().getServletRegistrations();
 
-        // Tập hợp tất cả các Servlet trong WebApp của bạn.
         Collection<? extends ServletRegistration> values = servletRegistrations.values();
         for (ServletRegistration sr : values) {
             Collection<String> mappings = sr.getMappings();
@@ -81,7 +75,6 @@ public class JDBCFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
 
         // Chỉ mở connection (kết nối) đối với các request có đường dẫn đặc biệt.
-        // (Chẳng hạn đường dẫn tới các servlet, jsp, ..)
         // 
         // Tránh tình trạng mở Connection với các yêu cầu thông thường.
         // (Chẳng hạn image, css, javascript,... )

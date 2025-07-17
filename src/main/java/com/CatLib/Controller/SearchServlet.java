@@ -17,10 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -44,8 +41,6 @@ public class SearchServlet extends HttpServlet {
 
         List<Book> books = BookDAO.searchBookByInput(conn, input);
         List<Category> category = CategoryDAO.findAllCategory(conn);
-        System.out.println(input);
-
         if (books == null) {
             req.setAttribute("notFound", "not found");
         } else {

@@ -170,10 +170,7 @@ public class UserDAO {
             pstm.setBoolean(1, !isActive);
             pstm.setString(2, id);
             int affectedRows = pstm.executeUpdate();
-            if (affectedRows == 0) {
-                return false;
-            }
-            return true;
+            return affectedRows != 0;
         } catch (SQLException e) {
             System.out.println(e.toString());
             return false;

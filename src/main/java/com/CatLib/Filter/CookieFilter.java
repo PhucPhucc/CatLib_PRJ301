@@ -18,7 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  *
@@ -47,7 +46,6 @@ public class CookieFilter implements Filter {
         HttpSession session = req.getSession();
 
         User userInSession = MyUtils.getLoginedUser(session);
-        // 
         if (userInSession != null) {
             session.setAttribute("COOKIE_CHECKED", "CHECKED");
             chain.doFilter(request, response);
