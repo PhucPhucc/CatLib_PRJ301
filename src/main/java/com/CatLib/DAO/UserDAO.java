@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -20,23 +23,25 @@ public class UserDAO {
             String userName, String password) {
 
         String sql = "Select userId, username, password, full_name, role, is_active from Users u " //
-                + " where u.username = ? and u.password= ?";
+                + " where u.username = ?";
         try {
             PreparedStatement pstm = conn.prepareStatement(sql);
             pstm.setString(1, userName);
-            pstm.setString(2, password);
             ResultSet rs = pstm.executeQuery();
 
-            if (rs.next()) {
-                int userId = Integer.parseInt(rs.getString("userId"));
-                String fullName = rs.getString("full_name");
-                String role = rs.getString("role");
-                boolean isActive = rs.getString("is_active").equals("1");
+            while (rs.next()) {
+                String hashedPassword = rs.getString("password");
+                if (BCrypt.checkpw(password, hashedPassword)) {
+                    int userId = Integer.parseInt(rs.getString("userId"));
+                    String fullName = rs.getString("full_name");
+                    String role = rs.getString("role");
+                    boolean isActive = rs.getString("is_active").equals("1");
 
-                User user = new User(userId, userName, password, fullName, role, isActive);
-
-                return user;
+                    User user = new User(userId, userName, password, fullName, role, isActive);
+                    return user;
+                }
             }
+            return null;
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
@@ -74,6 +79,36 @@ public class UserDAO {
         return null;
     }
 
+    public static User findUserById(Connection conn, String userId) {
+        String sql = "Select * from Users u " //
+                + " where u.userId = ?";
+        try {
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setString(1, userId);
+
+            ResultSet rs = pstm.executeQuery();
+
+//         public User(int userId, String username, String password, String fullName,
+//            String role, boolean isActive, String email, String phone) {
+            if (rs.next()) {
+                String userName = rs.getString("userName");
+                String email = rs.getString("email");
+                boolean isActive = rs.getString("is_active").equals("1");
+
+                User user = new User();
+                user.setUserId(Integer.parseInt(userId));
+                user.setUsername(userName);
+                user.setEmail(email);
+                user.setActive(isActive);
+                return user;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+
+        return null;
+    }
+
     public static int createUser(Connection conn, String userName, String password, String email) {
         String sql = "INSERT INTO Users (username, password, email, role) VALUES (?, ?, ?, ?) "
                 + "SELECT SCOPE_IDENTITY() AS NewUserID;";
@@ -93,6 +128,56 @@ public class UserDAO {
         }
 
         return -1;
+    }
+
+    public static List<User> findAllUsers(Connection conn) {
+        String sql = "select userId, userName, email, is_active from Users"
+                + " where Users.role = ? ";
+
+        List<User> users = new ArrayList<>();
+        try {
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setString(1, "user");
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                int userId = rs.getInt("userId");
+                String userName = rs.getString("userName");
+                String email = rs.getString("email");
+                String isActive = rs.getString("is_active");
+
+                User u = new User();
+                u.setUserId(userId);
+                u.setUsername(userName);
+                u.setEmail(email);
+                if (isActive.equals("1")) {
+                    u.setActive(true);
+                } else {
+                    u.setActive(false);
+                }
+                users.add(u);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+
+        return users;
+    }
+
+    public static boolean activeUser(Connection conn, String id, boolean isActive) {
+        String sql = "update users set is_active = ? where UserID = ?;";
+        try {
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setBoolean(1, !isActive);
+            pstm.setString(2, id);
+            int affectedRows = pstm.executeUpdate();
+            if (affectedRows == 0) {
+                return false;
+            }
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+            return false;
+        }
     }
 
 }

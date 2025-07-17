@@ -24,3 +24,16 @@ html {
 .profile:hover div {
     display: block !important;
 }
+
+.animate-spin-manual {
+    animation: rotateLoop 2.5s linear infinite;
+}
+
+@keyframes rotateLoop {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -27,7 +27,7 @@ public class ReturnServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String orderId = req.getParameter("id");
         Connection conn = MyUtils.getStoredConnection(req);
-        OrderDAO.returnOrder(conn, Integer.parseInt(orderId));
+//        OrderDAO.returnOrder(conn, Integer.parseInt(orderId));
         
         resp.sendRedirect(req.getContextPath() + "/user/order?status=returned");
     }

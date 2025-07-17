@@ -38,7 +38,6 @@ public class BookManagerServlet extends HttpServlet {
         Connection conn = MyUtils.getStoredConnection(req);
         List<Book> books = BookDAO.findAllBook(conn);
 
-
         req.setAttribute("books", books);
 
         HttpSession session = req.getSession(false);

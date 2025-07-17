@@ -23,7 +23,6 @@
             };
         </script>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/styles.css?v=<%= System.currentTimeMillis()%>"/>
-
     </head>
     <body
         class="flex flex-col min-h-dvh font-mono smooth-transition bg-[#c7f0fc] bg-center bg-no-repeat bg-cover min-h-screen dark:bg-gray-800 text-[#5f899f] dark:text-white"
@@ -52,18 +51,20 @@
                                 <c:choose>
                                     <c:when test="${order.status=='pending'}">
                                         <p class="font-semibold">Status: <span  class="text-gray-700">Pending</span></p>
-                                        </c:when>
-                                        <c:when test="${order.status=='approved'}">
+                                    </c:when>
+                                    <c:when test="${order.status=='approved'}">
+                                        <p>Rental fee until now: <span>${order.bill}</span>VND</p>
                                         <p class="font-semibold">Status: <span  class="text-green-700">Approved</span></p>
-                                        </c:when>
-                                        <c:when test="${order.status=='rejected'}">
+                                    </c:when>
+                                    <c:when test="${order.status=='rejected'}">
                                         <p class="font-semibold">Status: <span  class="text-red-700">Rejected</span></p>
-                                        </c:when>
-                                        <c:when test="${order.status=='overdue'}">
+                                    </c:when>
+                                    <c:when test="${order.status=='overdue'}">
+                                        <p>Rental fee until now: <span>${order.bill}</span>VND</p>
                                         <p class="font-semibold">Status: <span  class="text-yellow-700">Overdue</span></p>
-                                        </c:when>
-                                        <c:when test="${order.status=='returned'}">
-                                        <p class="font-semibold">Status: <span  class="text-green-700">Return</span></p>
+                                    </c:when>
+                                    <c:when test="${order.status=='returned'}">
+                                        <p class="font-semibold">Status: <span  class="text-blue-700">Return</span></p>
                                     </c:when>
                                 </c:choose>
                             </div>
@@ -72,24 +73,57 @@
                             <!-- <p>Book Available: <span  class="text-green-600">Available</span></p> -->
                             <!--<p>Book Available: <span  class="text-red-600">Unavailable</span></p>-->
                         </div>
-                        <c:choose>
-                            <c:when test="${order.status=='pending'}">
-                                <div class="absolute bottom-2 right-3 text-right">
-                                    <p class="text-gray-500">Status:</p>
-                                    <p class="text-gray-800 dark:text-gray-200">You may collect your book from the libary right now</p>
-                                </div>  
-                            </c:when>
+                        <div class="absolute bottom-4 right-5 text-right">
 
-                            <c:when test="${order.status=='rejected'}">
-                                <div class="absolute bottom-2 right-3 text-right">
-                                    <p class="text-gray-500">Status:</p>
-                                    <p class="text-gray-800 dark:text-gray-200">The book you ordered is no longer available</p>
-                                </div> 
-                            </c:when>
+                            <c:if test="${loginedUser.role == 'user'}">
+                                <c:choose>
+                                    <c:when test="${order.status=='pending'}">
+                                        <p class="text-gray-500">Status:</p>
+                                        <p class="text-gray-800 dark:text-gray-200">You may collect your book from the libary right now</p>
+                                    </c:when>
 
-                        </c:choose>    
+                                    <c:when test="${order.status=='rejected'}">
+                                        <p class="text-gray-500">Status:</p>
+                                        <p class="text-gray-800 dark:text-gray-200">The book you ordered is no longer available</p>
+                                    </c:when>
+                                </c:choose>    
+                            </c:if>
 
+                            <c:if test="${loginedUser.role == 'admin'}">
+                                <c:choose>
+                                    <c:when test="${order.status=='pending'}">
+                                        <div>
 
+                                            <a
+                                                href="${pageContext.request.contextPath}/admin/user-manager/action?id=${order.orderId}&userId=${order.userId}&action=approved"
+                                                class="text-center mr-4 px-4 py-2 bg-green-700 text-white rounded border border-green-700 hover:bg-green-600"
+                                                >
+                                                Approved
+                                            </a>
+
+                                            <a
+                                                href="${pageContext.request.contextPath}/admin/user-manager/action?id=${order.orderId}&userId=${order.userId}&action=rejected"
+                                                class="text-center px-4 py-2 bg-red-700 text-white rounded border border-red-700 hover:bg-red-600"
+                                                >
+                                                Rejected
+                                            </a>
+                                        </div>
+
+                                    </c:when>
+
+                                    <c:when test="${order.status=='approved'}">
+                                        <div>
+                                            <a
+                                                href="${pageContext.request.contextPath}/admin/user-manager/action?id=${order.orderId}&userId=${order.userId}&action=returned"
+                                                class="text-center px-4 py-2 bg-green-700 text-white rounded border border-green-700 hover:bg-green-600"
+                                                >
+                                                Return
+                                            </a>
+                                        </div>
+                                    </c:when>
+                                </c:choose>    
+                            </c:if>
+                        </div>  
                     </div>
                 </c:forEach>
 
@@ -97,6 +131,10 @@
         </main>
 
         <!--<script src="${pageContext.request.contextPath}/script/main.js"></script>-->
-
+        <script>
+            if (${not empty messageAction}) {
+                alert("${messageAction}");
+            }
+        </script>
     </body>
 </html>

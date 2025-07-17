@@ -12,7 +12,6 @@ import com.CatLib.Model.Book;
 import com.CatLib.Model.Category;
 import com.CatLib.Ultis.AdminUltil;
 import com.CatLib.Ultis.MyUtils;
-import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,9 +20,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -33,23 +29,6 @@ import java.util.Map;
 public class AddBookManagerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Connection conn = MyUtils.getStoredConnection(req);
-
-//        List<Category> categories = CategoryDAO.findAllCategory(conn);
-//        List<Author> authors = AuthorDAO.findAllAuthor(conn);
-//
-//        Map<String, Object> responseData = new HashMap<>();
-//        responseData.put("categories", categories);
-//        responseData.put("authors", authors);
-//
-//        Gson gson = new Gson();
-//        String finalJson = gson.toJson(responseData);
-//
-//        resp.getWriter().write(finalJson);
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class OrderDAO {
             ResultSet rs = pstm.executeQuery();
             List<OrderModel> list = new ArrayList<>();
             while (rs.next()) {
-                
+
 //            int id = Integer.parseInt(rs.getString("bookid"));
                 int orderId = rs.getInt("orderId");
                 String title = rs.getString("title");
@@ -60,7 +61,7 @@ public class OrderDAO {
         return null;
     }
 
-    public static List<OrderModel> findOrderByStatus(Connection conn, User user, String status) {
+    public static List<OrderModel> findOrderByStatus(Connection conn, String userId, String status) {
         String sql;
 
         if (status == null) {
@@ -84,7 +85,7 @@ public class OrderDAO {
         PreparedStatement pstm;
         try {
             pstm = conn.prepareStatement(sql);
-            pstm.setString(1, String.valueOf(user.getUserId()));
+            pstm.setString(1, userId);
             ResultSet rs = pstm.executeQuery();
             List<OrderModel> list = new ArrayList<>();
             while (rs.next()) {
@@ -96,13 +97,23 @@ public class OrderDAO {
                 String publishDate = rs.getString("PublishDate");
                 Date orderDate = rs.getDate("OrderDate");
                 Date returnDate = rs.getDate("ReturnDate");
-
                 String statusLabel = rs.getString("status");
-
                 String url = rs.getString("imageURL");
-
+                long bill = 0;
+                if (statusLabel.equals("approved") || statusLabel.equals("overdue")) {
+                    LocalDate pastLocalDate = orderDate.toLocalDate();
+                    LocalDate currentDate = LocalDate.now();
+                    long daysPassed = ChronoUnit.DAYS.between(pastLocalDate, currentDate) + 1;
+                    if(daysPassed <= 14) {
+                        bill = daysPassed * 5000;
+                    } else {
+                        bill = (daysPassed - 14) * 10000 + (14 * 5000);
+                    }
+                }
                 OrderModel order = new OrderModel(orderId, title, description,
                         publisher, publishDate, orderDate, returnDate, url, statusLabel);
+                order.setUserId(Integer.valueOf(userId));
+                order.setBill(bill);
                 list.add(order);
             }
             return list;
@@ -169,16 +180,19 @@ public class OrderDAO {
         }
     }
 
-    public static void returnOrder(Connection conn, int orderId) {
-        String sql = "update BookOrders set status = 'returned' where orderId = ?";
+    public static boolean ActionOrder(Connection conn, String orderId, String action) {
+
+        String sql = "update BookOrders set status = ? where orderId = ?";
 
         try (PreparedStatement pstm = conn.prepareStatement(sql)) {
-            pstm.setInt(1, orderId);
-            pstm.executeUpdate();
+            pstm.setString(1, action);
+            pstm.setString(2, orderId);
+            int affected = pstm.executeUpdate();
+            return affected != 0;
         } catch (SQLException e) {
             System.out.println(e);
+            return false;
         }
-
     }
 
 }

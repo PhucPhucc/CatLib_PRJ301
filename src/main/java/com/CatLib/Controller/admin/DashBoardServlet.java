@@ -22,6 +22,7 @@ import java.util.List;
  */
 @WebServlet(urlPatterns = {"/admin/dashboard"})
 public class DashBoardServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -7,10 +7,10 @@
 function confirmBook(id, status) {
     let result;
     if (status === 'borrow') {
-        result = confirm(`Are you sure you want to ${status} this book?\nFee: 5.000VND/day
+        result = confirm(`Are you want to ${status} this book?\nFee: 5.000VND/day
 Overdue Fee: 10.000VND/day`);
     } else if (status === 'return') {
-        result = confirm(`Are you sure you want to ${status} this book?`);
+        result = confirm(`Are you want to ${status} this book?`);
     } else {
         result = false;
     }

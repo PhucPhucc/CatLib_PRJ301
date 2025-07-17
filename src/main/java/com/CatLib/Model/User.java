@@ -15,17 +15,17 @@ public class User {
     private String password;
     private String fullName; // full_name trong SQL
     private String role;
-    private boolean isActive; // is_active trong SQL
+    private boolean active; // is_active trong SQL
     private String email;
     private String phone;
 
-    public User(int userId, String username, String password, String fullName, String role, boolean isActive) {
+    public User(int userId, String username, String password, String fullName, String role, boolean active) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.role = role;
-        this.isActive = isActive;
+        this.active = active;
     }
 
     public User(String username, String password, String email) {
@@ -33,7 +33,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = "user";
-        this.isActive = true;
+        this.active = true;
     }
 
     
@@ -47,17 +47,17 @@ public class User {
         this.password = password;
         this.fullName = email;
         this.role = "user";
-        this.isActive = true;
+        this.active = true;
     }
 
     // Constructor
     public User(String username, String password, String fullName,
-            String role, boolean isActive, String email, String phone) {
+            String role, boolean active, String email, String phone) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.role = role;
-        this.isActive = isActive;
+        this.active = active;
         this.email = email;
         this.phone = phone;
     }
@@ -84,7 +84,7 @@ public class User {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public String getEmail() {
@@ -117,7 +117,7 @@ public class User {
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     public void setEmail(String email) {
@@ -135,7 +135,7 @@ public class User {
                 + ", username='" + username + '\''
                 + ", fullName='" + fullName + '\''
                 + ", role='" + role + '\''
-                + ", isActive=" + isActive
+                + ", isActive=" + active
                 + ", email='" + email + '\''
                 + ", phone='" + phone + '\''
                 + '}';

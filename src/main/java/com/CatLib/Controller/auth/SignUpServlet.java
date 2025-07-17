@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -44,16 +44,6 @@ public class SignUpServlet extends HttpServlet {
         User user = null;
         boolean hasError = false;
         String errorString = null;
-//
-//        User userAccount = DataDAO.findUser(userName, password);
-//
-//        if (!password.equals(rePassword) || userAccount != null) {
-//            RequestDispatcher dispatcher
-//                    = this.getServletContext().getRequestDispatcher("/WEB-INF/views/signinView.jsp");
-//
-//            dispatcher.forward(req, resp);
-//            return;
-//        }
 
         if (userName == null || password == null || userName.length() == 0 || password.length() == 0) {
             hasError = true;
@@ -92,17 +82,21 @@ public class SignUpServlet extends HttpServlet {
         else {
             int userId;
             Connection conn = MyUtils.getStoredConnection(req);
+            
+            // băm password
+            String hashedPassWord = BCrypt.hashpw(password, BCrypt.gensalt(10));
+            
             // Tạo User trong DB
-            userId = UserDAO.createUser(conn, userName, password, email);
+            userId = UserDAO.createUser(conn, userName, hashedPassWord, email);
             if (userId != -1) {
 
-                user = new User(userId, userName, password, email);
+                user = new User(userId, userName, hashedPassWord, email);
                 HttpSession session = req.getSession();
                 MyUtils.storeLoginedUser(session, user);
                 resp.sendRedirect(req.getContextPath() + "/home");
 
             } else {
-                RequestDispatcher dispatcher //
+                RequestDispatcher dispatcher 
                         = this.getServletContext().getRequestDispatcher("/views/signUpView.jsp");
 
                 dispatcher.forward(req, resp);

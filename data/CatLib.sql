@@ -27,7 +27,7 @@ CREATE TABLE Book_Author (
     FOREIGN KEY (BookID) REFERENCES Book(BookID),
     FOREIGN KEY (AuthorID) REFERENCES Author(AuthorID)
 );
-CREATE TABLE Users (
+CREATE TABLE Users ( -- id, username, email, active, 
     UserID  INT IDENTITY(1,1) PRIMARY KEY,
     username NVARCHAR(50) UNIQUE NOT NULL,
     password NVARCHAR(255) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE BookOrders (
     BookID INT,
     OrderDate DATE NOT NULL,
     ReturnDate DATE NOT NULL,
-    ActualReturnDate DATE,
+         DATE,
     Bill DECIMAL(10, 2),
     Status NVARCHAR(20) CHECK (Status IN ('pending', 'approved', 'rejected', 'overdue', 'returned')),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),

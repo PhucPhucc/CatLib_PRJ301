@@ -10,11 +10,10 @@
     >
     <ul class="sticky top-12 left-0">
         <li class="px-4 mb-2 ml-1 hover:font-extrabold">
-            <a
-                href="${pageContext.request.contextPath}/user/order?status=returned"
+            <div
+                onclick="selectOption('returned')"
                 class="block"
-                >History</a
-            >
+                >History</div>
         </li>
 
         <!-- Dropdown -->

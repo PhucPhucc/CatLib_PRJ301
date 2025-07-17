@@ -30,6 +30,8 @@ import java.util.Map;
 @WebServlet(urlPatterns = {"/admin/book-manager/get-book"})
 public class GetBookManagerServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");

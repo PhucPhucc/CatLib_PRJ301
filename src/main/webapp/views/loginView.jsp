@@ -3,7 +3,7 @@
     Created on : Jun 1, 2025, 12:08:54 AM
     Author     : DuyPhuc
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>  
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html class="">
@@ -35,18 +35,20 @@
       <form action="${pageContext.request.contextPath}/login" method="post" class="flex flex-col pt-6">
         <label for="username" class="mt-6 mb-2">Username</label>
         <input type="text" name="username" id="username"
-               class="bg-gray-200 rounded-[2rem] border-b-2 border-gray-300 focus:border-[#5f899f] outline-none py-1 px-2 ">
-
+               class="bg-gray-200 rounded-[2rem] border-b-2 border-gray-300 focus:border-[#5f899f] outline-none py-1 px-4 ">
+               
         <label for="password" class="mt-6 mb-2">Password</label>
         <input type="password" name="password" id="password"
-               class="bg-gray-200 rounded-[2rem] border-b-2 border-gray-300 focus:border-[#5f899f] outline-none py-1 px-2 ">
+               class="bg-gray-200 rounded-[2rem] border-b-2 border-gray-300 focus:border-[#5f899f] outline-none py-1 px-4 ">
 
         <div class="pt-2 flex items-center gap-2">
           <!-- <a href=""></a> -->
           <input type="checkbox" value="remember" name="remember" id="remember">
           <label for="remember">Remember me?</label>
         </div>
-
+        <c:if test="${not empty errorString}">
+            <p class="text-red-700 font-bold-">${errorString}</p>
+        </c:if>    
         <button type="submit" class="py-2 mt-8 text-sm text-white bg-[#4ca6bf] hover:bg-[#668f9b] rounded-[2rem]">Log
           in</button>
       </form>

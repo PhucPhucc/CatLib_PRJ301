@@ -26,7 +26,7 @@
         </li>
         <li>
             <a
-                href="${pageContext.request.contextPath}/admin/dashboard"
+                href="${pageContext.request.contextPath}/admin/user-manager"
                 class="hover:font-semibold hover:underline hover:underline-offset-2 block"
                 >Users</a
             >

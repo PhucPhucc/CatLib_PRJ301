@@ -83,6 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+function triggerFileUpload() {
+    document.getElementById('file-upload').click();
+}
 
 function previewImage(input) {
     if (input.files && input.files[0]) {
@@ -190,4 +193,12 @@ const fillInput = (element, inputName) => {
     ul.classList.add("hidden");
 };
 
+function confirmDel(id) {
 
+    const result = confirm(`Are you want to delete this book?`);
+    if (result) {
+        window.location.href = `${window.location.href}/delete?id=${id}`;
+    } else {
+        event.preventDefault();
+    }
+}

@@ -143,7 +143,7 @@
                                             Edit
                                         </a>
                                         <a
-                                            href="${pageContext.request.contextPath}/admin/book-manager/delete?id=${book.bookId}"
+                                            onclick="confirmDel(${book.bookId})"
                                             class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 border border-red-500 rounded inline-block cursor-pointer"
                                             >
                                             Delete

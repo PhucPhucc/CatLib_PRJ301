@@ -34,7 +34,7 @@ public class OrderServlet extends HttpServlet {
         String status = req.getParameter("status");
 
         Connection conn = MyUtils.getStoredConnection(req);
-        List<OrderModel> orders = OrderDAO.findOrderByStatus(conn, loginedUser, status);
+        List<OrderModel> orders = OrderDAO.findOrderByStatus(conn, String.valueOf(loginedUser.getUserId()), status);
 
         req.setAttribute("orders", orders);
         req.setAttribute("status", status);
