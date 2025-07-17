@@ -32,7 +32,9 @@
 
             <main class="absolute bottom-0 left-0 right-0 h-1/2 pl-32 flex bg-neutral-100 dark:bg-neutral-800 rounded-tl-[4vw] rounded-tr-[4vw] ring smooth-transition">
                 <div class="-translate-y-1/2 w-1/5">
-                    <img class="rounded-xl w-full ring " src="${book.urlImage}" alt="">
+                    <div class="aspect-img">
+                        <img class="rounded-xl w-full ring " src="${pageContext.request.contextPath}/image/${book.urlImage}" alt="" />
+                </div>
                 <p class="text-sm mt-6 pt-2 border-t border-gray-400">tag: <span>${book.categoryName}</span></p>
             </div>
             <div class="w-4/5 px-8">

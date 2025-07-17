@@ -31,6 +31,7 @@ public class UserFilter implements Filter {
 
         if (loginedUser == null || !loginedUser.isActive()) {
             // Redirect (Chuyển hướng) tới trang login.
+            System.out.println("=================");
             resp.sendRedirect(req.getContextPath() + "/login");
         } else if (loginedUser.getRole().equals("admin")) {
             resp.sendRedirect(req.getContextPath() + "/permission");

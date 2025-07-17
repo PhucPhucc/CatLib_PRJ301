@@ -37,8 +37,8 @@
                 <div class="flex-[5]">
                 <c:forEach items="${orders}" var="order">
                     <div class="flex relative p-4 border-b border-neutral-400">
-                        <div class="bg-white p-2 mr-6 rounded-lg w-[12rem]">
-                            <img class="w-full h-full" src="${order.imageUrl}" alt="${order.title}" />
+                        <div class="aspect-img bg-white p-2 mr-6 rounded-lg w-[12rem]">
+                            <img class="w-full h-full" src="${pageContext.request.contextPath}/image/${order.imageUrl}" alt="${order.title}" />
                         </div>
                         <div class="flex flex-col justify-between flex-1 text-gray-500">
                             <div>
