@@ -25,6 +25,12 @@ html {
     display: block !important;
 }
 
+.aspect-img {
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+}
+
+
 .animate-spin-manual {
     animation: rotateLoop 2.5s linear infinite;
 }
