@@ -96,7 +96,7 @@
                             <tbody id="table_body" class="block md:table-row-group">
                             <c:forEach items="${books}" var="book" >
                                 <tr
-                                    class="bg-gray-300 border border-grey-500 md:border-none block md:table-row"
+                                    class="bg-gray-300 dark:bg-gray-700 border border-grey-500 md:border-none block md:table-row"
                                     >
                                     <td
                                         class="p-2 md:border md:border-grey-500 text-left block md:table-cell"

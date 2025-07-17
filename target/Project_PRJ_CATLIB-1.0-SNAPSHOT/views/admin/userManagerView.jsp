@@ -80,7 +80,7 @@
                             <tbody id="table_body" class="block md:table-row-group">
                             <c:forEach items="${users}" var="user" >
                                 <tr
-                                    class="bg-gray-300 border border-grey-500 md:border-none block md:table-row"
+                                    class="bg-gray-300 dark:bg-gray-700 border border-grey-500 md:border-none block md:table-row"
                                     >
                                     <td
                                         class="p-2 md:border md:border-grey-500 text-left block md:table-cell"
@@ -155,7 +155,11 @@
                 </div>
             </div>
         </main>
-
+        <script>
+            if (${not empty active}) {
+                alert("${active}");
+            }
+        </script>
         <script src="${pageContext.request.contextPath}/script/main.js?v=<%= System.currentTimeMillis()%>"></script>
     </body>
 </html>

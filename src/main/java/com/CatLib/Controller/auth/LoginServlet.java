@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
-import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -29,6 +28,14 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+         HttpSession session = req.getSession(false);
+        if (session != null) {
+            String message = (String) session.getAttribute("message");
+            if (message != null) {
+                req.setAttribute("message", message);
+                session.removeAttribute("message");
+            }
+        }
         RequestDispatcher dispatcher = req.getRequestDispatcher("/views/loginView.jsp");
         dispatcher.forward(req, resp);
     }

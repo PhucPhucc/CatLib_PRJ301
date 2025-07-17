@@ -4,7 +4,6 @@ package com.CatLib.Controller.admin;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 import com.CatLib.DAO.UserDAO;
 import com.CatLib.Ultis.MyUtils;
 import jakarta.servlet.ServletException;
@@ -23,6 +22,8 @@ import java.sql.Connection;
 @WebServlet(urlPatterns = {"/admin/user-manager/deactivate"})
 public class DeactivateUserManagerServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
@@ -31,9 +32,11 @@ public class DeactivateUserManagerServlet extends HttpServlet {
         boolean isSuccess = UserDAO.activeUser(conn, id, isActive);
         HttpSession session = req.getSession();
         if (isSuccess) {
-            session.setAttribute("active", "Users have been " + isActive + " successfully");
+            session.setAttribute("active", "Users have been " + (isActive ? "actived" : "deativate") + " successfully");
         } else {
-            session.setAttribute("active", "Users have been " + isActive + " unsuccessfully");
+            session.setAttribute("active", "Users have been " + (isActive ? "actived" : "deativate") + " unsuccessfully");
         }
+        resp.sendRedirect(req.getContextPath() + "/admin/user-manager");
+
     }
 }

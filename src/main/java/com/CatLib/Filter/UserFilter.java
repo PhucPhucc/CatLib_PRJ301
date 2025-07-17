@@ -14,6 +14,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -31,7 +32,8 @@ public class UserFilter implements Filter {
 
         if (loginedUser == null || !loginedUser.isActive()) {
             // Redirect (Chuyển hướng) tới trang login.
-            System.out.println("=================");
+            HttpSession session = req.getSession();
+            session.setAttribute("message", "The account has been disabled or not existed");
             resp.sendRedirect(req.getContextPath() + "/login");
         } else if (loginedUser.getRole().equals("admin")) {
             resp.sendRedirect(req.getContextPath() + "/permission");

@@ -4,12 +4,8 @@
  */
 package com.CatLib.Controller.admin;
 
-import com.CatLib.DAO.AuthorDAO;
 import com.CatLib.DAO.BookDAO;
-import com.CatLib.DAO.CategoryDAO;
-import com.CatLib.Model.Author;
 import com.CatLib.Model.Book;
-import com.CatLib.Model.Category;
 import com.CatLib.Ultis.AdminUltil;
 import com.CatLib.Ultis.MyUtils;
 import jakarta.servlet.ServletException;

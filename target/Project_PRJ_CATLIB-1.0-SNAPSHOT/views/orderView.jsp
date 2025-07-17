@@ -40,7 +40,7 @@
                         <div class="aspect-img bg-white p-2 mr-6 rounded-lg w-[12rem]">
                             <img class="w-full h-full" src="${pageContext.request.contextPath}/image/${order.imageUrl}" alt="${order.title}" />
                         </div>
-                        <div class="flex flex-col justify-between flex-1 text-gray-500">
+                        <div class="flex flex-col justify-between flex-1 text-gray-500 dark:text-gray-300">
                             <div>
                                 <p class="text-4xl font-bold text-[#5f899f] dark:text-gray-200">${order.title}</p>
                                 <p class="">${order.authorName}</p>
@@ -50,7 +50,7 @@
                                 <!--thêm if else đổi màu cho status-->
                                 <c:choose>
                                     <c:when test="${order.status=='pending'}">
-                                        <p class="font-semibold">Status: <span  class="text-gray-700">Pending</span></p>
+                                        <p class="font-semibold">Status: <span  class="text-gray-700 dark:text-gray-300">Pending</span></p>
                                     </c:when>
                                     <c:when test="${order.status=='approved'}">
                                         <p>Rental fee until now: <span>${order.bill}</span>VND</p>

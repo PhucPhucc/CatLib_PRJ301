@@ -4,14 +4,9 @@
  */
 package com.CatLib.Controller.admin;
 
-import com.CatLib.DAO.AuthorDAO;
 import com.CatLib.DAO.BookDAO;
-import com.CatLib.DAO.CategoryDAO;
-import com.CatLib.Model.Author;
 import com.CatLib.Model.Book;
-import com.CatLib.Model.Category;
 import com.CatLib.Ultis.MyUtils;
-import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,9 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
