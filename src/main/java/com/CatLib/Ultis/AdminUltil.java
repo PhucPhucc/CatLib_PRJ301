@@ -19,7 +19,7 @@ public class AdminUltil {
         String publisher = req.getParameter("publisher");
         String stockQuantity = req.getParameter("stockQuantity");
         String description = req.getParameter("description");
-        String imageUrl = req.getContextPath() + "/image/" + req.getParameter("imagePath");
+        String imageUrl = req.getParameter("imagePath");
 
         return new Book(title, Date.valueOf(publishDate), publisher, Integer.parseInt(stockQuantity), description, imageUrl);
         

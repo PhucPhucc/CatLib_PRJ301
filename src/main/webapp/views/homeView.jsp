@@ -57,7 +57,7 @@
                     <c:forEach items="${books}" var="book">
                         <div class="bg-white rounded-md p-3 dark:bg-gray-950 smooth-transition">
                             <div class="aspect-img">
-                                <img class="w-full h-full object-cover" src="${book.urlImage}" alt="${book.title}">
+                                <img class="w-full h-full object-cover" src="${pageContext.request.contextPath}/image/${book.urlImage}" alt="${book.title}">
                             </div>
                             <p class="text-2xl font-semibold py-2 overflow-hidden text-ellipsis whitespace-nowrap">${book.title}</p>
                             <p class=" line-2 overflow-hidden text-ellipsis text-left text-sm text-gray-700 font-medium leading-[1.5] min-h-[3em]">${book.description}</p>

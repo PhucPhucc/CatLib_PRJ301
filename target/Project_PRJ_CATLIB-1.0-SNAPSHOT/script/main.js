@@ -132,6 +132,7 @@ const openModalUpdate = (bookId) => {
                 const stockQuantity = document.querySelector("#stockQuantity");
                 const description = document.querySelector("#description ");
                 const imageURL = document.querySelector("#preview");
+                const imageInput = document.querySelector("#imagePath");
                 const btnAdd = document.querySelector("#btn-add");
                 const form = document.querySelector("#form-book");
                 dialog.showModal();
@@ -142,8 +143,8 @@ const openModalUpdate = (bookId) => {
                 author.value = data.authorName;
                 stockQuantity.value = data.stockQuantity;
                 description.value = data.description;
-                imageURL.src = data.urlImage;
-
+                imageURL.src = "/CatLib/image/" + data.urlImage;
+                imageInput.value = data.urlImage;
                 btnAdd.textContent = 'Update';
                 form.action = window.location.href + '/update?id=' + bookId;
 
