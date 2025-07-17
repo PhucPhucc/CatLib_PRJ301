@@ -39,12 +39,13 @@
                 <div class="p-4 bg-white rounded-md w-1/6 max-h-max dark:bg-gray-950 smooth-transition ">
                     <p class="py-1 text-3xl text-[#5f899f] font-semibold ">Category</p>
 
-                    <form method="post" action="${pageContext.request.contextPath}/search" class="text-md gap-1 xl:grid xl:grid-cols-2 md:flex md:flex-col">
+                    <form method="post" action="${pageContext.request.contextPath}/search" 
+                          class="text-md gap-1 md:flex md:flex-col">
 
                         <c:forEach items="${tags}" var="tag">
-                            <div class="flex items-center justify-between">
-                                <label >${tag.name}</label>
-                                <input type="radio" name="search" value="${tag.categoryId}">
+                            <div class="flex items-center gap-4">
+                                <input id="${tag.categoryId}" type="radio" name="search" value="${tag.categoryId}">
+                                <label for="${tag.categoryId}" class="text-ellipsis whitespace-nowrap line-1 overflow-hidden">${tag.name}</label>
                             </div>
                         </c:forEach>
                         <button type="submit" class="my-2 py-1 bg-[#303e3b] text-white rounded-md col-span-2 hover:bg-[#668f9b]">Find</button>
