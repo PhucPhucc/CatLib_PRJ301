@@ -10,26 +10,34 @@
         Manager List
     </p>
     <ul class="text-2xl">
+
         <li>
-            <a
-                href="${pageContext.request.contextPath}/admin/dashboard"
-                class="hover:font-semibold hover:underline hover:underline-offset-2 block pb-1"
-                >Dashboard</a
-            >
-        </li>
-        <li>
-            <a
+            <a  
+                id="books"
                 href="${pageContext.request.contextPath}/admin/book-manager"
-                class="hover:font-semibold hover:underline hover:underline-offset-2 block pb-1"
+                class="hover:font-semibold hover:underline underline-offset-2 block pb-1"
                 >Books</a
             >
         </li>
         <li>
             <a
+                id="users"
                 href="${pageContext.request.contextPath}/admin/user-manager"
-                class="hover:font-semibold hover:underline hover:underline-offset-2 block"
+                class="hover:font-semibold hover:underline underline-offset-2 block"
                 >Users</a
             >
         </li>
     </ul>
 </div>
+
+<script>
+    const href = window.location.pathname;
+
+    if (href.endsWith('book-manager')) {
+        document.getElementById('books').classList.add('underline', 'font-semibold');
+        document.getElementById('users').classList.remove('underline', 'font-semibold');
+    } else if (href.endsWith('user-manager')) {
+        document.getElementById('books').classList.remove('underline', 'font-semibold');
+        document.getElementById('users').classList.add('underline', 'font-semibold');
+    }
+</script>

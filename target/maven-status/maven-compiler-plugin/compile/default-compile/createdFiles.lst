@@ -9,7 +9,6 @@ com\CatLib\Model\Category.class
 com\CatLib\Conn\ConnectionUtils.class
 com\CatLib\Controller\OrderServlet.class
 com\CatLib\DAO\BookDAO.class
-com\CatLib\Controller\admin\DashBoardServlet.class
 com\CatLib\Controller\admin\DeactivateUserManagerServlet.class
 com\CatLib\Controller\admin\DeleteBookManagerServlet.class
 com\CatLib\Controller\SearchServlet.class

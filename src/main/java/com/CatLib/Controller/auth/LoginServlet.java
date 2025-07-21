@@ -100,7 +100,7 @@ public class LoginServlet extends HttpServlet {
             if (user.getRole().equals("user")) {
                 resp.sendRedirect(req.getContextPath() + "/home");
             } else {
-                resp.sendRedirect(req.getContextPath() + "/admin/dashboard");
+                resp.sendRedirect(req.getContextPath() + "/admin/book-manager");
             }
         }
     }

@@ -35,14 +35,13 @@ public class SearchServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         String input = req.getParameter("search");
         Connection conn = MyUtils.getStoredConnection(req);
 
         List<Book> books = BookDAO.searchBookByInput(conn, input);
         List<Category> category = CategoryDAO.findAllCategory(conn);
         if (books == null) {
-            req.setAttribute("notFound", "not found");
+            req.setAttribute("notFound", "notFound");
         } else {
             req.setAttribute("books", books);
         }

@@ -33,20 +33,10 @@
 
 
                 <div class="flex-[4]">
-                    <div class="w-full flex items-center justify-between py-2 pl-4 pr-6">
-                        <input
-                            id="searchBook"
-                            class="border-2 border-neutral-800 py-1 px-2 rounded-lg w-96"
-                            type="text"
-                            placeholder="search"
-                            name="search"
-                            autocomplete="off"
-                            />
-                    </div>
                     <!-- component -->
-                    <div class="max-h-[40rem] overflow-y-auto">
-                        <table class="min-w-full border-collapse block md:table">
-                            <thead class="block md:table-header-group">
+                    <div class="max-h-[40rem] overflow-y-auto ">
+                        <table class="min-w-full border-collapse block md:table ">
+                            <thead class="block md:table-header-group  smooth-transition">
                                 <tr
                                     class="border border-grey-500 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto md:relative"
                                     >

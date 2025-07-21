@@ -9,7 +9,7 @@
 <header class="flex justify-between items-center p-6 mt-2 text-[#5f899f]">
     <a
         class="flex items-center h-16 bg-white rounded-full px-4 dark:bg-gray-900 dark:text-gray-100 smooth-transition"
-        href="${pageContext.request.contextPath}/admin/dashboard"
+        href="${pageContext.request.contextPath}/admin/book-manager"
         >
         <img class="w-full h-full" src="${pageContext.request.contextPath}/image/logo.PNG" alt="logo CatLib" />
         <p class="text-4xl font-bold py-2">CATLIB</p>
@@ -36,20 +36,6 @@
                 >
                 <div class="absolute -top-4 right-0 bg-transparent w-12 h-4"></div>
                 <ul class="text-center rounded-md overflow-hidden">
-                    <li class="">
-                        <a
-                            href="/log-out"
-                            class="px-4 py-1 block hover:bg-neutral-700 hover:text-white"
-                            >Profile</a
-                        >
-                    </li>
-                    <li class="">
-                        <a
-                            href="/log-out"
-                            class="px-4 py-1 block hover:bg-neutral-700 hover:text-white"
-                            >Setting</a
-                        >
-                    </li>
                     <li>
                         <a
                             href="${pageContext.request.contextPath}/log-out"

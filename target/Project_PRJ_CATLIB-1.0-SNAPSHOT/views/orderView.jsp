@@ -27,10 +27,20 @@
     <body
         class="flex flex-col min-h-dvh font-mono smooth-transition bg-[#c7f0fc] bg-center bg-no-repeat bg-cover min-h-screen dark:bg-gray-800 text-[#5f899f] dark:text-white"
         >
+        <c:choose>
+            <c:when test="${loginedUser == null || loginedUser.role=='user'}">
+                <jsp:include page="_header.jsp"></jsp:include>
 
-        <jsp:include page="_header.jsp"></jsp:include>
+            </c:when>            
+            <c:when test="${loginedUser != null && loginedUser.role=='admin'}">
+                <jsp:include page="admin/_header.jsp"></jsp:include>
 
-            <main class="relative flex-1 flex bg-neutral-200 rounded-tl-[3rem] dark:bg-neutral-800 ring smooth-transition">
+            </c:when>
+
+        </c:choose>
+
+
+        <main class="relative flex-1 flex bg-neutral-200 rounded-tl-[3rem] dark:bg-neutral-800 ring smooth-transition">
             <jsp:include page="_menuOrder.jsp"></jsp:include>
 
 
